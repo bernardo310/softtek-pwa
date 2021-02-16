@@ -8,19 +8,15 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-
-      <BrowserRouter>
-        <AuthProvider>
-          <Switch>
-            <PrivateRoute exact path='/' component={Restaurantes} />
-            <Route path='/signup' component={Signup} />
-            <Route path='/login' component={Login} />
-          </Switch>
-        </AuthProvider>
-      </BrowserRouter>
-
-    </div>
+    <BrowserRouter>
+      <AuthProvider>
+        <Switch>
+          <PrivateRoute exact path='/' component={Restaurantes} />
+          <Route path='/signup' component={Signup} />
+          <Route path='/login' component={Login} />
+        </Switch>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
