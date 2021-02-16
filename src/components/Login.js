@@ -33,6 +33,7 @@ export default function Login() {
             <Row className='justify-content-center'>
                 <Col xs={12} md={5} className='text-center'>
                     <h1>Plaza Real Order To Go</h1>
+                    <h2>Iniciar sesión</h2>
                 </Col>
             </Row>
             <Row className='justify-content-center'>
@@ -53,10 +54,10 @@ export default function Login() {
                     </form>
                 </Col>
             </Row>
-            <Row className='justify-content-center '>
+            <Row className='justify-content-center'>
                 <Col xs={12} md={3} className='text-center'>
                     <hr />
-                    <p className='text-smallest'>¡Crea una cuenta nueva <Link to="/signup">aquí</Link>!</p>
+                    <p className='text-smallest'>¿Aún no tienes cuenta? <Link to="/signup">Registrate</Link></p>
                 </Col>
             </Row>
         </Container>
