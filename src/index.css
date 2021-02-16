@@ -1,13 +1,151 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css?family=Poppins:400');
+
+:root { 
+  --main-text: #001833;
+  --main-light: #FAFCFF;
+  --background-color: #FCFCFC;
+  --error: #FF3333;
+  --main: #FF6961;
+  --main-shadow: rgba(255, 105, 97, 0.4);
+  --complementary: #4BC65A;
+  --secondary-button: #FFE7E5;
+  --main-green: #00E52F;
+  --light-green: #E5FFEB;
+  --main-blue: #15F4EE;
+  --light-blue: #E7FEFD;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+html {
+  font-size: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+} /*16px*/
+
+body {
+  background: white;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--main-text);
+  margin: 0;
+  padding: 0;
+}
+
+p {margin-bottom: .38rem;}
+
+h1, h2, h3, h4, h5 {
+  margin: 1rem 0 .38rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 1.802rem;
+}
+
+h2 {font-size: 1.602rem;}
+
+h3 {font-size: 1.424rem;}
+
+h4 {font-size: 1.266rem;}
+
+h5 {font-size: 1.125rem;}
+
+small, .text-small {font-size: 0.889rem;}
+
+.text-smaller {font-size: 0.79rem;}
+
+.text-smallest {font-size: 0.702rem;}
+
+.vertical-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.full-height {
+  height: 100vh;
+}
+
+.input-wrapper {
+  position: relative;
+  height: 56px;
+  border-radius: 0.5rem;
+  border: 2px solid var(--main-text);
+  background: var(--main-light);
+  padding: 0;
+  margin: 0;
+}
+
+.input {
+  position: relative;
+  width: 100%;
+  height: 56px;
+  background: transparent;
+  border: 0;
+  font-weight: 700;
+  text-indent: 0.75rem;
+  color: var(--main-text);
+  border: 2px solid transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.input:focus {
+  outline: 0;
+}
+
+.input-wrapper:focus-within {
+  border: 2px solid var(--main-text);
+}
+
+.input:focus + .input-placeholder {
+  background: var(--main-light);
+  transform: translate(0.625rem, -10px) scale(0.8);
+  color: var(--main-text);
+}
+
+.input-placeholder.focused {
+  background: var(--main-light);
+  transform: translate(0.625rem, -10px) scale(0.8);
+}
+
+.input-placeholder {
+  color: var(--main-text);
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  padding: 0 0.25rem;
+  font-weight: 700;
+  transform: translate(0.5rem, 15px);
+  transform-origin: 0% 0%;
+  background: transparent;
+  pointer-events: none;
+  transition: transform 0.35s, background 0.35s;
+}
+
+.button {
+  height: 40px;
+  text-align: center;
+  border: none;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.button.primary {
+  background-color: var(--main);
+  color: white;
+  box-shadow: 0px 0px 10px 0px var(--main-shadow);
+}
+
+.button.block {
+  display: block;
+  width: 100%;
 }
