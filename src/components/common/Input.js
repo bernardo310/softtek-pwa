@@ -20,7 +20,7 @@ class Input extends Component {
     render(){
         return(
             <div className='input-wrapper mt-2 mb-3'>
-                <input type={this.props.type} className='input' value={this.state.value} onChange={this.handleValue} ref={this.props.ref}/>
+                <input type={this.props.type} className='input' value={this.state.value} onChange={this.handleValue} ref={this.props.innerRef}/>
                 <div className={`input-placeholder ${this.state.value.length > 0 && 'focused'}`}>
                     {this.props.label}
                 </div>
@@ -29,4 +29,4 @@ class Input extends Component {
     }
 }
 
-export default Input;
+export default React.forwardRef((props, ref) => <Input innerRef={ref} {...props} />);
