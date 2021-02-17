@@ -1,29 +1,31 @@
 import React, { useRef, useState } from 'react'
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { Link, useHistory } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
-import Input from './common/Input';
-import Button from './common/Button';
+import Input from '../common/Input';
+import Button from '../common/Button';
 
-export default function Login() {
+export default function Signup() {
     const emailRef = useRef();
     const passwordRef = useRef();
-    const { login } = useAuth();
+    const confirmpasswordRef = useRef();
+    const { signup, currentUser } = useAuth();
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const history = useHistory();
 
     async function handleSubmit(e) {
-        console.log('login')
+        console.log('signup')
         e.preventDefault()
+        if (passwordRef.current.value !== confirmpasswordRef.current.value) return setError('Las contraseñas deben ser iguales')
         try {
             setError('');
             setLoading(true);
-            await login(emailRef.current.value, passwordRef.current.value)
+            await signup(emailRef.current.value, passwordRef.current.value)
             history.push('/')
-        } catch (err) {
+        } catch(err) {
             console.log(err)
-            setError('Error iniciando sesion')
+            setError('Error creando cuenta')
         }
         setLoading(false);
     }
@@ -33,31 +35,33 @@ export default function Login() {
             <Row className='justify-content-center'>
                 <Col xs={12} md={5} className='text-center'>
                     <h1>Plaza Real Order To Go</h1>
-                    <h2>Iniciar sesión</h2>
+                    <h2>Crear cuenta</h2>
                 </Col>
             </Row>
             <Row className='justify-content-center'>
                 <Col xs={12} md={3}>
                     {error ? <p>{error}</p> : ''}
+                    {/*{JSON.stringify(currentUser)}*/}
                     <form onSubmit={handleSubmit}>
                         {/*<p>correo</p>
                         <input type="text" ref={emailRef} />
-
                         <p>password</p>
                         <input type="text" ref={passwordRef} />
-                        <button type="submit" disabled={loading}>login</button>
-                        <br />
-                        */}
+                        <p>confirm password</p>
+                        <input type="text" ref={confirmpasswordRef} />
+                        <button type="submit" disabled={loading}>registrar</button>*/}
+
                         <Input type='email' label='Correo' ref={emailRef} />
                         <Input type='password' label='Contraseña' ref={passwordRef} />
-                        <Button type='submit' disabled={loading} label='Iniciar sesión' variant='primary'/>
+                        <Input type='password' label='Confirmar contraseña' ref={confirmpasswordRef} />
+                        <Button type='submit' disabled={loading} label='Registrarme' variant='primary'/>
                     </form>
                 </Col>
             </Row>
             <Row className='justify-content-center'>
                 <Col xs={12} md={3} className='text-center'>
                     <hr />
-                    <p className='text-smallest'>¿Aún no tienes cuenta? <Link to="/signup">Registrate</Link></p>
+                    <p className='text-smallest'>¿Ya tienes cuenta? <Link to="/login"> Inicia sesión</Link></p>
                 </Col>
             </Row>
         </Container>
