@@ -12,7 +12,7 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Switch>
-          <PrivateRoute exact path='/' component={RestaurantsView} />
+          <PrivateRoute exact path='/restaurantes' component={RestaurantsView} />
           <Route path='/signup' component={Signup} />
           <Route path='/login' component={Login} />
           <Route path='/ordenes' component={Prueba} />

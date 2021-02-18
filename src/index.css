@@ -265,6 +265,26 @@ nav .nav-link.active {
     border-top-right-radius: 5px;
     box-shadow: 0px -3px 10px 0px var(--border-gray);
   }
+
+  .navbar-nav {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  .navbar .nav-link {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-link img {
+    margin-bottom: 5px;
+  }
+
+  .nav-item {
+    width: 33%;
+    text-align: center;
+  }
 }
 
 
