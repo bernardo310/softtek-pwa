@@ -5,7 +5,7 @@ class Prueba extends Component {
     render() {
         return(
             <>
-            <Menu />
+            <Menu {...this.props} />
             <h1>Prueba</h1>
             </>
         );

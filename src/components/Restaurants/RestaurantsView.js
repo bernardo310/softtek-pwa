@@ -97,8 +97,8 @@ class RestaurantsView extends Component {
     render() {
         return (
             <>
-                <Menu />
-                <Container className='mb-5'>
+                <Menu {...this.props}/>
+                <Container className='mb-5 mt-3'>
                     <Row className='justify-content-between'>
                         <Col xs='auto' className='vertical-center'>
                             <h1>Restaurantes</h1>

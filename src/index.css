@@ -201,6 +201,10 @@ small, .text-small, .text-smaller, .text-smallest {
   height: 14px;
 }
 
+.icon circle, .icon path, .icon rect {
+  stroke: var(--gray-text) !important;
+}
+
 a .icon {
   height: 20px;
 }
@@ -216,6 +220,10 @@ a .icon {
   padding: 5px 10px;
 }
 
+.cash-pill .icon circle, .cash-pill .icon path, .cash-pill .icon rect {
+  stroke: var(--main-green) !important;
+}
+
 .card-pill {
   background-color: var(--light-blue);
   border: 1px solid var(--main-blue);
@@ -225,6 +233,10 @@ a .icon {
 .card-pill p {
   color: var(--main-blue);
   padding: 5px 10px;
+}
+
+.card-pill .icon circle, .card-pill .icon path, .card-pill .icon rect {
+  stroke: var(--main-blue) !important;
 }
 
 .navbar {
@@ -239,8 +251,49 @@ nav .nav-link {
   color: var(--gray-text) !important;
 }
 
+nav .nav-link .icon circle, nav .nav-link .icon path, nav .nav-link .icon rect {
+  stroke: var(--gray-text) !important;
+}
+
 nav .nav-link.active {
   color: var(--main) !important;
+}
+
+nav .nav-link.active .icon circle, nav .nav-link.active .icon path, nav .nav-link.active .icon rect {
+  stroke: var(--main) !important;
+}
+
+.faq-card {
+  border-radius: 5px !important;
+  border: none;
+  box-shadow: 0px 0px 10px 0px var(--border-gray);
+  position: relative;
+}
+
+.faq-card .card-header {
+  background-color: white;
+  border-bottom: none;
+}
+
+.faq-card .card-header p {
+  max-width: 92%;
+}
+
+.faq-card .icon {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  transform: rotate(0deg);
+  transition: transform 0.1s;
+}
+
+.faq-card .collapsing ~ .icon, .faq-card .show ~ .icon {
+  transform: rotate(180deg);
+  transition: transform 0.1s;
+}
+
+.gray-text {
+  color: var(--gray-text);
 }
 
 @media only screen and (min-width: 768px) {
