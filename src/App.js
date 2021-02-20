@@ -3,6 +3,8 @@ import PrivateRoute from './components/PrivateRoute';
 import Signup from './components/Auth/Signup';
 import Login from './components/Auth/Login';
 import RestaurantsView from './components/Restaurants/RestaurantsView';
+import OrdersView from './components/Orders/OrdersView';
+import HelpView from './components/Help/HelpView';
 import { AuthProvider } from './contexts/AuthContext';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
@@ -14,6 +16,8 @@ function App() {
           <PrivateRoute exact path='/' component={RestaurantsView} />
           <Route path='/signup' component={Signup} />
           <Route path='/login' component={Login} />
+          <Route path='/ordenes' component={OrdersView} />
+          <Route path='/ayuda' component={HelpView} />
         </Switch>
       </AuthProvider>
     </BrowserRouter>

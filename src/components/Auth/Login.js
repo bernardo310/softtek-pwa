@@ -20,7 +20,7 @@ export default function Login() {
             setError('');
             setLoading(true);
             await login(emailRef.current.value, passwordRef.current.value)
-            history.push('/')
+            history.push('/restaurantes')
         } catch (err) {
             console.log(err)
             setError('Error iniciando sesion')
@@ -31,7 +31,7 @@ export default function Login() {
     async function handleGoogleLogIn(e) {
         e.preventDefault();
         await loginWithGoogle(emailRef.current.value, passwordRef.current.value);
-        history.push('/')
+        history.push('/restaurantes')
     }
 
     return (

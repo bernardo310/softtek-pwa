@@ -149,8 +149,11 @@ small, .text-small, .text-smaller, .text-smallest {
 
 .button.primary {
   background-color: var(--main);
-  color: white;
   box-shadow: 0px 0px 10px 0px var(--main-shadow);
+}
+
+.button.primary p {
+  color: white;
 }
 
 .button.block {
@@ -198,6 +201,14 @@ small, .text-small, .text-smaller, .text-smallest {
   height: 14px;
 }
 
+.icon circle, .icon path, .icon rect {
+  stroke: var(--gray-text) !important;
+}
+
+a .icon {
+  height: 20px;
+}
+
 .cash-pill {
   background-color: var(--light-green);
   border: 1px solid var(--main-green);
@@ -207,6 +218,10 @@ small, .text-small, .text-smaller, .text-smallest {
 .cash-pill p {
   color: var(--main-green);
   padding: 5px 10px;
+}
+
+.cash-pill .icon circle, .cash-pill .icon path, .cash-pill .icon rect {
+  stroke: var(--main-green) !important;
 }
 
 .card-pill {
@@ -220,10 +235,109 @@ small, .text-small, .text-smaller, .text-smallest {
   padding: 5px 10px;
 }
 
+.card-pill .icon circle, .card-pill .icon path, .card-pill .icon rect {
+  stroke: var(--main-blue) !important;
+}
+
+.navbar {
+  position: sticky;
+  height: 45px;
+  background-color: white;
+  box-shadow: 0px 0px 10px 0px var(--border-gray);
+  z-index: 1024;
+}
+
+nav .nav-link {
+  color: var(--gray-text) !important;
+}
+
+nav .nav-link .icon circle, nav .nav-link .icon path, nav .nav-link .icon rect {
+  stroke: var(--gray-text) !important;
+}
+
+nav .nav-link.active {
+  color: var(--main) !important;
+}
+
+nav .nav-link.active .icon circle, nav .nav-link.active .icon path, nav .nav-link.active .icon rect {
+  stroke: var(--main) !important;
+}
+
+.faq-card {
+  border-radius: 5px !important;
+  border: none;
+  box-shadow: 0px 0px 10px 0px var(--border-gray);
+  position: relative;
+}
+
+.faq-card .card-header {
+  background-color: white;
+  border-bottom: none;
+}
+
+.faq-card .card-header p {
+  max-width: 92%;
+}
+
+.faq-card .icon {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  transform: rotate(0deg);
+  transition: transform 0.1s;
+}
+
+.faq-card .collapsing ~ .icon, .faq-card .show ~ .icon {
+  transform: rotate(180deg);
+  transition: transform 0.1s;
+}
+
+.gray-text {
+  color: var(--gray-text);
+}
+
+@media only screen and (min-width: 768px) {
+  .navbar {
+    top: 0;
+  }
+}
+
 @media only screen and (max-width: 767px) {
   h1 {font-size: 1.266rem;}
   
   h2 {font-size: 1.125rem;}
+
+  .nav-link {font-size: 0.702rem;}
+
+  .navbar {
+    position: fixed;
+    bottom: 0;
+    height: 65px;
+    width: 100%;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    box-shadow: 0px -3px 10px 0px var(--border-gray);
+  }
+
+  .navbar-nav {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  .navbar .nav-link {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-link img {
+    margin-bottom: 5px;
+  }
+
+  .nav-item {
+    width: 33%;
+    text-align: center;
+  }
 }
 
 
