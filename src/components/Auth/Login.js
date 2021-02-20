@@ -8,7 +8,7 @@ import Button from '../common/Button';
 export default function Login() {
     const emailRef = useRef();
     const passwordRef = useRef();
-    const { login } = useAuth();
+    const { login, loginWithGoogle } = useAuth();
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const history = useHistory();
@@ -27,7 +27,11 @@ export default function Login() {
         }
         setLoading(false);
     }
-
+    async function handleGoogleLogIn(e) {
+        e.preventDefault();
+        await loginWithGoogle(emailRef.current.value, passwordRef.current.value);
+        history.push('/restaurantes')
+    }
     return (
         <Container className='vertical-center full-height'>
             <Row className='justify-content-center'>
@@ -53,6 +57,7 @@ export default function Login() {
                         <Button type='submit' disabled={loading} label='Iniciar sesión' variant='primary'/>
                     </form>
                 </Col>
+                <button onClick={handleGoogleLogIn} variant='primary'>Iniciar sesion con google</button>
             </Row>
             <Row className='justify-content-center'>
                 <Col xs={12} md={3} className='text-center'>
