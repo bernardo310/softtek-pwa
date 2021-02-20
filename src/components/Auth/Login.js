@@ -20,20 +20,18 @@ export default function Login() {
             setError('');
             setLoading(true);
             await login(emailRef.current.value, passwordRef.current.value)
-            history.push('/restaurantes')
+            history.push('/')
         } catch (err) {
             console.log(err)
             setError('Error iniciando sesion')
         }
         setLoading(false);
     }
-
     async function handleGoogleLogIn(e) {
         e.preventDefault();
         await loginWithGoogle(emailRef.current.value, passwordRef.current.value);
         history.push('/restaurantes')
     }
-
     return (
         <Container className='vertical-center full-height'>
             <Row className='justify-content-center'>
@@ -60,7 +58,6 @@ export default function Login() {
                     </form>
                 </Col>
                 <button onClick={handleGoogleLogIn} variant='primary'>Iniciar sesion con google</button>
-
             </Row>
             <Row className='justify-content-center'>
                 <Col xs={12} md={3} className='text-center'>
