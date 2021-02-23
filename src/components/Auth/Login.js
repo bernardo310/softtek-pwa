@@ -30,7 +30,7 @@ export default function Login() {
     async function handleGoogleLogIn(e) {
         e.preventDefault();
         await loginWithGoogle(emailRef.current.value, passwordRef.current.value);
-        history.push('/restaurantes')
+        history.push('/')
     }
     return (
         <Container className='vertical-center full-height'>

@@ -2,44 +2,34 @@ import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import HelpList from './HelpList';
 import Menu from '../common/Menu';
+const { db } = require('../../firebase');
 
 class HelpView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            faq: [
-                {
-                    question: '¿Puedo actualizar el “cajon de estacionamiento”?',
-                    answer: 'Respuesta 1',
-                },
-                {
-                    question: 'Pregunta 2',
-                    answer: 'Respuesta 2',
-                },
-                {
-                    question: 'Pregunta 3',
-                    answer: 'Respuesta 3',
-                },
-                {
-                    question: 'Pregunta 4',
-                    answer: 'Respuesta 4',
-                },
-                {
-                    question: 'Pregunta 5',
-                    answer: 'Respuesta 5',
-                },
-                {
-                    question: 'Pregunta 6',
-                    answer: 'Respuesta 6',
-                },
-            ]
+            faq: []
         }
+    }
+
+    componentDidMount() {
+        db.collection('faq').orderBy('position').get().then((snapshot) => {
+            const faq = [];
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                faq.push({
+                    question: data.questions,
+                    answer: data.answer
+                })
+            })
+            this.setState({ faq })
+        });
     }
     //const { currentUser } = useAuth()
     render() {
         return (
             <>
-                <Menu {...this.props}/>
+                <Menu {...this.props} />
                 <Container className='mb-5 mt-3'>
                     <Row className='justify-content-between'>
                         <Col xs='auto' className='vertical-center'>
