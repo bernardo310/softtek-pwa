@@ -16,8 +16,8 @@ function App() {
           <PrivateRoute exact path='/' component={RestaurantsView} />
           <Route path='/signup' component={Signup} />
           <Route path='/login' component={Login} />
-          <Route path='/ordenes' component={OrdersView} />
-          <Route path='/ayuda' component={HelpView} />
+          <PrivateRoute path='/ordenes' component={OrdersView} />
+          <PrivateRoute path='/ayuda' component={HelpView} />
         </Switch>
       </AuthProvider>
     </BrowserRouter>
