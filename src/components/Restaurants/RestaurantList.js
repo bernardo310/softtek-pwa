@@ -10,7 +10,10 @@ const RestaurantList = (props) => {
 
     const navigateToRestaurant = (restaurant) => {
         const name = restaurant.name.replace(/\s/g, '');
-        history.push(`/restaurant/${name}`);
+        history.push({
+            pathname: `/restaurant/${name}`,
+            state: { detail: restaurant }
+        });
     }
 
     return(
