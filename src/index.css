@@ -20,6 +20,7 @@ html {
   margin: 0;
   padding: 0;
   background-color: var(--background-color);
+  scroll-behavior: smooth;
 } /*16px*/
 
 body {
@@ -161,12 +162,32 @@ small, .text-small, .text-smaller, .text-smallest {
   width: 100%;
 }
 
-.list-img {
-  height: 100px;
-  width: 100px;
+.button.secondary {
+  background-color: var(--secondary-button);
+}
+
+.button.secondary p {
+  color: var(--main);
+}
+
+.button p {
+  margin: 0px 12px;
+}
+
+.list-img, .restaurant-img {
   object-fit: cover;
   border-radius: 5px;
   border: 1px solid var(--border-gray);
+}
+
+.list-img {
+  height: 100px;
+  width: 100px;
+}
+
+.restaurant-img {
+  height: 150px;
+  width: 150px;
 }
 
 .searchbar {
@@ -195,6 +216,14 @@ small, .text-small, .text-smaller, .text-smallest {
   height: 12.64px;
   top: calc((56px - 12.64px)/2);
   left: 10px;
+}
+
+.header-icon {
+  height: 25px;
+}
+
+.header-icon path {
+  stroke-width: 8px;
 }
 
 .icon {
@@ -294,6 +323,80 @@ nav .nav-link.active .icon circle, nav .nav-link.active .icon path, nav .nav-lin
 
 .gray-text {
   color: var(--gray-text);
+}
+
+.main-text {
+  color: var(--main-text);
+}
+
+.header, .restaurant-sections {
+  position: sticky;
+  z-index: 9;
+  background-color: var(--background-color);
+}
+
+.header {
+  top: 0;
+}
+
+.restaurant-sections {
+  top: calc(1rem + 56px + 1.5rem);
+}
+
+.restaurant-header {
+  background-color: white;
+  /*z-index: 9;
+  position: sticky;
+  top: 0;*/
+}
+
+.menu-sections-list {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  overflow-x: scroll;
+}
+
+.menu-sections-item {
+  display: flex;
+  flex-direction: row;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.menu-sections-item a {
+  color: var(--main-text);
+}
+
+.menu-sections-item a:hover{
+  text-decoration: none;
+}
+
+.menu-sections-item.active a {
+  border-bottom: 2px solid var(--main);
+  color: var(--main);
+}
+
+.shopping-link {
+  position: relative;
+}
+
+.added-items {
+  position: absolute;
+  height: 15px;
+  width: 15px;
+  border-radius: 100px;
+  background-color: var(--main);
+  top: -5px;
+  right: -5px;
+  text-align: center;
+}
+
+.added-items p {
+  color: white;
 }
 
 @media only screen and (min-width: 768px) {

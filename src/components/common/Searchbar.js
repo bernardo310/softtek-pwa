@@ -19,7 +19,7 @@ class Searchbar extends Component {
     render() {
         return(
             <div className='searchbar'>
-                <input type='text' value={this.state.value} onChange={this.handleValue} placeholder='Busca algún restaurante' />
+                <input type='text' value={this.state.value} onChange={this.handleValue} placeholder={this.props.placeholder} />
                 <img src={searchIcon} />
             </div>
         );
