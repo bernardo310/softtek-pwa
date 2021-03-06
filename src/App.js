@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PrivateRoute from './components/PrivateRoute';
 import Signup from './components/Auth/Signup';
 import Login from './components/Auth/Login';
@@ -7,6 +7,7 @@ import OrdersView from './components/Orders/OrdersView';
 import HelpView from './components/Help/HelpView';
 import { AuthProvider } from './contexts/AuthContext';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import RestaurantView from './components/Restaurant/RestaurantView';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path='/login' component={Login} />
           <PrivateRoute path='/ordenes' component={OrdersView} />
           <PrivateRoute path='/ayuda' component={HelpView} />
+          <Route path='/restaurant/:name' render={routerProps => <RestaurantView routerProps={routerProps} />} />
         </Switch>
       </AuthProvider>
     </BrowserRouter>

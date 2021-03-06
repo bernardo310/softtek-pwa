@@ -1,0 +1,56 @@
+import React, { Component } from 'react';
+import { Row, Col } from 'react-bootstrap';
+import Button from '../common/Button';
+
+class ProductList extends Component {
+
+    render() {
+        return(
+            <div id='Boneless'>
+                {this.props.products.map((product) => (
+                <div key={product.id}>
+                        <Row>
+                            <Col>
+                                <Row>
+                                    <Col xs={12}>
+                                        <p>{product.name}</p>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col xs={12}>
+                                        <p className='text-smaller'>{product.description}</p>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col xs='auto'>
+                                <img src={product.img} className='list-img' loading='lazy' />
+                            </Col>
+                        </Row>
+                        <Row className='mt-3 justify-content-between'>
+                            <Col xs='auto'>
+                                <p className='text-smaller main-text'>${product.price}</p>
+                            </Col>
+                            <Col xs='auto' className='ml-auto pr-0'>
+                                <Button label='Ver más' />
+                            </Col>
+                            <Col xs='auto'>
+                                {product.addedOfProduct > 0 ?
+                                    <div className='flex'>
+                                        <Button label='-' onClick={() => this.props.removeProduct(product.id)} />
+                                        <p className='mx-3'>{product.addedOfProduct}</p>
+                                        <Button label='+' variant='primary' onClick={() => this.props.addProduct(product.id)} />
+                                    </div>
+                                :
+                                    <Button label='¡Agregar!' variant='primary' onClick={() => this.props.addProduct(product.id)} />
+                                }
+                            </Col>
+                        </Row>
+                        <hr />
+                    </div>
+                ))}
+            </div>
+        );
+    }
+}
+
+export default ProductList;

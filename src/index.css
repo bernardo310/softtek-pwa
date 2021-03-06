@@ -20,6 +20,7 @@ html {
   margin: 0;
   padding: 0;
   background-color: var(--background-color);
+  scroll-behavior: smooth;
 } /*16px*/
 
 body {
@@ -33,8 +34,11 @@ body {
 }
 
 p {
-  margin-bottom: .38rem;
   font-weight: 700;
+}
+
+p, a {
+  margin-bottom: .38rem;
 }
 
 h1, h2, h3, h4, h5 {
@@ -68,6 +72,10 @@ small, .text-small, .text-smaller, .text-smallest {
   font-weight: 500;
 }
 
+.non-bold {
+  font-weight: 400 !important;
+}
+
 .vertical-center {
   display: flex;
   flex-direction: column;
@@ -95,7 +103,7 @@ small, .text-small, .text-smaller, .text-smallest {
   height: 56px;
   background: transparent;
   border: 0;
-  font-weight: 700;
+  font-weight: 400;
   text-indent: 0.75rem;
   color: var(--main-text);
   border: 2px solid transparent;
@@ -161,19 +169,60 @@ small, .text-small, .text-smaller, .text-smallest {
   width: 100%;
 }
 
-.list-img {
-  height: 100px;
-  width: 100px;
+.button.secondary {
+  background-color: var(--secondary-button);
+}
+
+.button.secondary p {
+  color: var(--main);
+}
+
+.button p {
+  margin: 0px 12px;
+}
+
+.google-button {
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0px 1px 5px -2px var(--gray-text);
+  justify-content: center;
+}
+
+.google-button p, .google-button img {
+  margin: auto 5px;
+}
+
+.google-button p {
+  color: var(--main-text);
+}
+
+.list-img, .restaurant-img {
   object-fit: cover;
   border-radius: 5px;
   border: 1px solid var(--border-gray);
+}
+
+.list-img {
+  height: 100px;
+  width: 100px;
+}
+
+.restaurant-img {
+  height: 150px;
+  width: 150px;
 }
 
 .searchbar {
   position: relative;
   height: 56px;
   width: 100%;
-  border: 1px solid var(--border-gray);
   color: var(--gray-text);
   background-color: #EFF2F5;
   border-radius: 5px;
@@ -185,7 +234,7 @@ small, .text-small, .text-smaller, .text-smallest {
   width: inherit;
   background-color: transparent;
   border-radius: inherit;
-  border: inherit;
+  border: 1px solid var(--border-gray);
   font-size: 0.79rem;
   font-weight: 500;
 }
@@ -197,7 +246,15 @@ small, .text-small, .text-smaller, .text-smallest {
   left: 10px;
 }
 
-.icon {
+.header-icon {
+  height: 25px;
+}
+
+.header-icon path {
+  stroke-width: 8px;
+}
+
+.icon, .restaurant-phone .icon  {
   height: 14px;
 }
 
@@ -294,6 +351,85 @@ nav .nav-link.active .icon circle, nav .nav-link.active .icon path, nav .nav-lin
 
 .gray-text {
   color: var(--gray-text);
+}
+
+.main-text {
+  color: var(--main-text);
+}
+
+.header, .restaurant-sections {
+  position: sticky;
+  z-index: 9;
+  background-color: var(--background-color);
+}
+
+.header {
+  top: 0;
+}
+
+.restaurant-sections {
+  top: calc(1rem + 56px + 1.5rem);
+}
+
+.restaurant-header {
+  background-color: white;
+  /*z-index: 9;
+  position: sticky;
+  top: 0;*/
+}
+
+.menu-sections-list {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  overflow-x: scroll;
+}
+
+.menu-sections-item {
+  display: flex;
+  flex-direction: row;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.menu-sections-item a {
+  color: var(--main-text);
+}
+
+.menu-sections-item a:hover{
+  text-decoration: none;
+}
+
+.menu-sections-item.active a {
+  border-bottom: 2px solid var(--main);
+  color: var(--main);
+}
+
+.shopping-link {
+  position: relative;
+}
+
+.added-items {
+  position: absolute;
+  height: 15px;
+  width: 15px;
+  border-radius: 100px;
+  background-color: var(--main);
+  top: -5px;
+  right: -5px;
+  text-align: center;
+}
+
+.added-items p {
+  color: white;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
 }
 
 @media only screen and (min-width: 768px) {

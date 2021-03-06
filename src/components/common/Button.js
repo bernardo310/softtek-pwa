@@ -21,10 +21,11 @@ class Button extends Component {
         return(
             <button 
                 type={this.props.type ? this.props.type : 'button'}
-                className={`button ${this.props.block && 'block'} ${this.props.variant === 'primary' ? 'primary' : 'secondary'}`}
+                className={`button ${this.props.block && 'block'} ${this.props.variant === 'primary' ? 'primary' : 'secondary'} ${this.props.className && this.props.className}`}
                 disabled={this.props.disabled}
+                onClick={this.props.onClick}
             >
-                <p className='text-smaller mb-0'>{this.props.label}</p>
+                <p className='text-smaller mb-0'><b>{this.props.label}</b></p>
             </button>
         );
     }

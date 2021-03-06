@@ -4,6 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import Input from '../common/Input';
 import Button from '../common/Button';
+import googleLogo from '../../assets/google-logo.png';
 
 export default function Login() {
     const emailRef = useRef();
@@ -14,7 +15,7 @@ export default function Login() {
     const history = useHistory();
 
     async function handleSubmit(e) {
-        console.log('login')
+        //console.log('login')
         e.preventDefault()
         try {
             setError('');
@@ -42,7 +43,7 @@ export default function Login() {
             </Row>
             <Row className='justify-content-center'>
                 <Col xs={12} md={3}>
-                    {error ? <p>{error}</p> : ''}
+                    {error && <p>{error}</p>}
                     <form onSubmit={handleSubmit}>
                         {/*<p>correo</p>
                         <input type="text" ref={emailRef} />
@@ -56,8 +57,9 @@ export default function Login() {
                         <Input type='password' label='Contraseña' ref={passwordRef} />
                         <Button type='submit' disabled={loading} label='Iniciar sesión' variant='primary'/>
                     </form>
+                    <p className='text-smallest text-center my-3'>o</p>
+                    <button onClick={handleGoogleLogIn} className='google-button' ><img src={googleLogo} loading='lazy' height='20px' /><p className='text-smaller'>Inicia sesión con google</p></button>
                 </Col>
-                <button onClick={handleGoogleLogIn} variant='primary'>Iniciar sesion con google</button>
             </Row>
             <Row className='justify-content-center'>
                 <Col xs={12} md={3} className='text-center'>

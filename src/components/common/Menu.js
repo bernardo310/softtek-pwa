@@ -5,7 +5,6 @@ import { Restaurants, Orders, Question } from '../../icons/icons';
 
 class Menu extends Component {
     render() {
-        console.log(this.props);
         return(
             <Navbar>
                 <Container className='px-2 justify-content-center justify-content-md-start'>
