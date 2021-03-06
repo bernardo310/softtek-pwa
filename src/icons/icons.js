@@ -237,3 +237,14 @@ aria-describedby="desc" role="img" xmlnsXlink="http://www.w3.org/1999/xlink" cla
 </svg>
 );
 
+export const Chevron = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-labelledby="title"
+aria-describedby="desc" role="img" xmlnsXlink="http://www.w3.org/1999/xlink" className={props.className}>
+  <title>Angle Down</title>
+  <desc>A line styled icon from Orion Icon Library.</desc>
+  <path data-name="layer1"
+  fill="none" stroke="#202020" stroke-miterlimit="10" stroke-width="2" d="M20 26l11.994 14L44 26"
+  stroke-linejoin="round" stroke-linecap="round"></path>
+</svg>
+);
+

@@ -18,11 +18,11 @@ const RestaurantList = (props) => {
 
     return(
         <>
-            {props.restaurants.map((restaurant) => (
-                <>
+            {props.restaurants.map((restaurant, i) => (
+                <div key={i}>
                     <Row onClick={() => navigateToRestaurant(restaurant)}>
                         <Col xs='auto'>
-                            <img src={restaurant.img} className='list-img' />
+                            <img src={restaurant.img} className='list-img' loading='lazy' />
                         </Col>
                         <Col>
                             <Row>
@@ -54,7 +54,7 @@ const RestaurantList = (props) => {
                         </Col>
                     </Row>
                     <hr />
-                </>
+                </div>
             ))}
         </>
     );

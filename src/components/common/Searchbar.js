@@ -20,7 +20,7 @@ class Searchbar extends Component {
         return(
             <div className='searchbar'>
                 <input type='text' value={this.state.value} onChange={this.handleValue} placeholder={this.props.placeholder} />
-                <img src={searchIcon} />
+                <img src={searchIcon} loading='lazy' />
             </div>
         );
     }

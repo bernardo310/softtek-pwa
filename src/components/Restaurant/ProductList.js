@@ -8,7 +8,7 @@ class ProductList extends Component {
         return(
             <div id='Boneless'>
                 {this.props.products.map((product) => (
-                    <>
+                <div key={product.id}>
                         <Row>
                             <Col>
                                 <Row>
@@ -23,20 +23,30 @@ class ProductList extends Component {
                                 </Row>
                             </Col>
                             <Col xs='auto'>
-                                <img src={product.img} className='list-img' />
+                                <img src={product.img} className='list-img' loading='lazy' />
                             </Col>
                         </Row>
                         <Row className='mt-3 justify-content-between'>
                             <Col xs='auto'>
                                 <p className='text-smaller main-text'>${product.price}</p>
                             </Col>
+                            <Col xs='auto' className='ml-auto pr-0'>
+                                <Button label='Ver más' />
+                            </Col>
                             <Col xs='auto'>
-                                <Button label='Ver más' className='mr-2' />
-                                <Button label='¡Agregar!' variant='primary' onClick={this.props.addToCart} />
+                                {product.addedOfProduct > 0 ?
+                                    <div className='flex'>
+                                        <Button label='-' onClick={() => this.props.removeProduct(product.id)} />
+                                        <p className='mx-3'>{product.addedOfProduct}</p>
+                                        <Button label='+' variant='primary' onClick={() => this.props.addProduct(product.id)} />
+                                    </div>
+                                :
+                                    <Button label='¡Agregar!' variant='primary' onClick={() => this.props.addProduct(product.id)} />
+                                }
                             </Col>
                         </Row>
                         <hr />
-                    </>
+                    </div>
                 ))}
             </div>
         );

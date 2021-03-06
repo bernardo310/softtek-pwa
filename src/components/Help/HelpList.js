@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Card, Accordion } from 'react-bootstrap';
-import { Restaurants } from '../../icons/icons';
+import { Chevron } from '../../icons/icons';
 
 class HelpList extends Component {
     render() {
@@ -19,7 +19,7 @@ class HelpList extends Component {
                                     <p className='text-smallest'>{question.answer}</p>
                                 </Card.Body>
                             </Accordion.Collapse>
-                            <Restaurants className='icon' />
+                            <Chevron className='icon' />
                         </Card>        
                     ))}
                     </Accordion>

@@ -109,7 +109,8 @@ class RestaurantsView extends Component {
                             openingTime: data.hours.substring(2, 8),
                             closingTime: data.hours.substring(10, 16),
                             cash: data.paymentTypes.includes("Efectivo") ? true : false,
-                            card: data.paymentTypes.includes("Tarjeta") ? true : false
+                            card: data.paymentTypes.includes("Tarjeta") ? true : false,
+                            phone: data.phone,
                         })
                     })
                     this.setState({ restaurants })
