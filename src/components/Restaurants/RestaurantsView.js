@@ -111,6 +111,7 @@ class RestaurantsView extends Component {
                             cash: data.paymentTypes.includes("Efectivo") ? true : false,
                             card: data.paymentTypes.includes("Tarjeta") ? true : false,
                             phone: data.phone,
+                            id: data.id
                         })
                     })
                     this.setState({ restaurants })
