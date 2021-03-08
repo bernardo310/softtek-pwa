@@ -77,7 +77,7 @@ class RestaurantView extends Component {
                                     products.push({
                                         id: data.id,
                                         name: data.name,
-                                        img: data.img ? data.img : 'https://www.buffalowildwings.com/globalassets/bww-logo_rgb_icon.png',
+                                        img: data.img ? data.img : restaurant.img,
                                         description: data.description,
                                         price: data.price,
                                         addedOfProduct: 0,
