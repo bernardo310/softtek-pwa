@@ -164,6 +164,11 @@ small, .text-small, .text-smaller, .text-smallest {
   color: white;
 }
 
+.button.primary:disabled {
+  filter: opacity(60%);
+  box-shadow: none;
+}
+
 .button.block {
   display: block;
   width: 100%;

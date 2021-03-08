@@ -12,7 +12,8 @@ export default function Signup() {
     const confirmpasswordRef = useRef();
     const { signup, currentUser, loginWithGoogle } = useAuth();
     const [error, setError] = useState('')
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
+    const [termsAndConditions, setTermsAndConditions] = useState(false);
     const history = useHistory();
 
     async function handleSubmit(e) {
@@ -62,10 +63,12 @@ export default function Signup() {
                         <Input type='email' label='Correo' ref={emailRef} />
                         <Input type='password' label='Contraseña' ref={passwordRef} />
                         <Input type='password' label='Confirmar contraseña' ref={confirmpasswordRef} />
-                        <Button type='submit' disabled={loading} label='Registrarme' variant='primary'/>
+                        <label><input type='checkbox' className='mr-2 my-3' onChange={() => setTermsAndConditions(!termsAndConditions)} />He leído y acepto los <Link to='terminos-y-condiciones' >términos y condiciones.</Link> </label>
+                        <Button type='submit' disabled={loading || !termsAndConditions} label='Registrarme' variant='primary'/>
+
                     </form>
                     <p className='text-smallest text-center my-3'>o</p>
-                    <button onClick={handleGoogleLogIn} className='google-button' ><img src={googleLogo} loading='lazy' height='20px' /><p className='text-smaller'>Registrate con google</p></button>
+                    <button onClick={handleGoogleLogIn} className='google-button'  ><img src={googleLogo} loading='lazy' height='20px' /><p className='text-smaller'>Registrate con google</p></button>
                 </Col>
             </Row>
             <Row className='justify-content-center'>
