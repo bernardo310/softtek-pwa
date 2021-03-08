@@ -4,12 +4,13 @@ import { Link, useHistory } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import Input from '../common/Input';
 import Button from '../common/Button';
+import googleLogo from '../../assets/google-logo.png';
 
 export default function Signup() {
     const emailRef = useRef();
     const passwordRef = useRef();
     const confirmpasswordRef = useRef();
-    const { signup, currentUser } = useAuth();
+    const { signup, currentUser, loginWithGoogle } = useAuth();
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const history = useHistory();
@@ -28,6 +29,13 @@ export default function Signup() {
             setError('Error creando cuenta')
         }
         setLoading(false);
+    }
+
+    async function handleGoogleLogIn(e) {
+        e.preventDefault();
+        if (passwordRef.current.value !== confirmpasswordRef.current.value) return setError('Las contraseñas deben ser iguales')
+        await loginWithGoogle(emailRef.current.value, passwordRef.current.value);
+        history.push('/')
     }
 
     return (
@@ -56,6 +64,8 @@ export default function Signup() {
                         <Input type='password' label='Confirmar contraseña' ref={confirmpasswordRef} />
                         <Button type='submit' disabled={loading} label='Registrarme' variant='primary'/>
                     </form>
+                    <p className='text-smallest text-center my-3'>o</p>
+                    <button onClick={handleGoogleLogIn} className='google-button' ><img src={googleLogo} loading='lazy' height='20px' /><p className='text-smaller'>Registrate con google</p></button>
                 </Col>
             </Row>
             <Row className='justify-content-center'>
