@@ -38,48 +38,7 @@ class RestaurantView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            products: [
-                {
-                    id: 0,
-                    name: 'Boneless chicas',
-                    img: 'https://www.buffalowildwings.com/globalassets/bww-logo_rgb_icon.png',
-                    description: 'Paquete de 10 piezas de boneless en cualquiera de nuestras deliciosas salsas',
-                    price: '120.00',
-                    addedOfProduct: 0,
-                },
-                {
-                    id: 1,
-                    name: 'Boneless medianas',
-                    img: 'https://www.buffalowildwings.com/globalassets/bww-logo_rgb_icon.png',
-                    description: 'Paquete de 10 piezas de boneless en cualquiera de nuestras deliciosas salsas',
-                    price: '120.00',
-                    addedOfProduct: 0,
-                },
-                {
-                    id: 2,
-                    name: 'Boneless grandes',
-                    img: 'https://www.buffalowildwings.com/globalassets/bww-logo_rgb_icon.png',
-                    description: 'Paquete de 10 piezas de boneless en cualquiera de nuestras deliciosas salsas',
-                    price: '120.00',
-                    addedOfProduct: 0,
-                },
-                {
-                    id: 3,
-                    name: 'Boneless extra grandes',
-                    img: 'https://www.buffalowildwings.com/globalassets/bww-logo_rgb_icon.png',
-                    description: 'Paquete de 10 piezas de boneless en cualquiera de nuestras deliciosas salsas',
-                    price: '120.00',
-                    addedOfProduct: 0,
-                },
-                {
-                    id: 4,
-                    name: 'Boneless super extra grandes',
-                    img: 'https://www.buffalowildwings.com/globalassets/bww-logo_rgb_icon.png',
-                    description: 'Paquete de 10 piezas de boneless en cualquiera de nuestras deliciosas salsas',
-                    price: '120.00',
-                    addedOfProduct: 0,
-                },
-            ],
+            products: [],
             restaurantData: {
                 name: 'Buffalo Wild Wings',
                 img: 'https://www.buffalowildwings.com/globalassets/bww-logo_rgb_icon.png',
@@ -88,10 +47,9 @@ class RestaurantView extends Component {
                 cash: false,
                 card: true,
                 phone: '8111234567',
-
             },
-            menuSections: ['Boneless', 'Alitas', 'Hamburguesas', 'Ensaladas', 'Bebidas', 'Postres'],
-            selectedSection: 'Boneless',
+            menuSections: [],
+            selectedSection: '',
             addedItems: 0,
             restaurant: [],
         }
@@ -115,16 +73,18 @@ class RestaurantView extends Component {
                             const menuSections = [];
                             snapshot.forEach((productsDoc, index) => {
                                 const data = productsDoc.data();
-                                products.push({
-                                    id: data.id,
-                                    name: data.name,
-                                    img: data.img ? data.img : 'https://www.buffalowildwings.com/globalassets/bww-logo_rgb_icon.png',
-                                    description: data.description,
-                                    price: data.price,
-                                    addedOfProduct: 0,
-                                    category: data.category
-                                })
-                                if (menuSections.indexOf(data.category) === -1) menuSections.push(data.category);
+                                if(data.isAvailable) {
+                                    products.push({
+                                        id: data.id,
+                                        name: data.name,
+                                        img: data.img ? data.img : 'https://www.buffalowildwings.com/globalassets/bww-logo_rgb_icon.png',
+                                        description: data.description,
+                                        price: data.price,
+                                        addedOfProduct: 0,
+                                        category: data.category
+                                    })
+                                    if (menuSections.indexOf(data.category) === -1) menuSections.push(data.category);
+                                }
                             })
                             this.setState({ restaurant, products, menuSections, selectedSection: menuSections[0] })
                         })
