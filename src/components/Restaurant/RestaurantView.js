@@ -77,7 +77,7 @@ class RestaurantView extends Component {
                                     products.push({
                                         id: data.id,
                                         name: data.name,
-                                        img: data.img ? data.img : restaurant.img,
+                                        img: data.img ? data.img : undefined,
                                         description: data.description,
                                         price: data.price,
                                         addedOfProduct: 0,
