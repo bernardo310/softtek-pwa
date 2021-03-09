@@ -39,6 +39,8 @@ class RestaurantView extends Component {
         super(props);
         this.state = {
             products: [],
+            filteredProducts: [],
+            searchInput: '',
             restaurantData: {
                 name: 'Buffalo Wild Wings',
                 img: 'https://www.buffalowildwings.com/globalassets/bww-logo_rgb_icon.png',
@@ -86,7 +88,7 @@ class RestaurantView extends Component {
                                     if (menuSections.indexOf(data.category) === -1) menuSections.push(data.category);
                                 }
                             })
-                            this.setState({ restaurant, products, menuSections, selectedSection: menuSections[0] })
+                            this.setState({ restaurant, products, filteredProducts: products, menuSections, selectedSection: menuSections[0] })
                         })
                     })
                 }).catch(err => {
@@ -96,6 +98,15 @@ class RestaurantView extends Component {
         }).catch(err => {
             console.log(err)
         });
+    }
+
+    handleSearch(e) {
+        let searchInput = e.target.value;
+        let products = [...this.state.products];
+        products = products.filter(product => {
+            return product.name.toLowerCase().includes(searchInput.toLowerCase())
+        })
+        this.setState({ searchInput, filteredProducts: products });
     }
 
     addProduct(productId) {
@@ -136,7 +147,7 @@ class RestaurantView extends Component {
                             </Link>
                         </Col>
                         <Col>
-                            <Searchbar placeholder='Busca un producto' />
+                            <Searchbar placeholder='Busca un producto' onChange={this.handleSearch.bind(this)} value={this.state.searchInput}/>
                         </Col>
                         <Col xs='auto' className='vertical-center'>
                             <Link to='/carrito' className='shopping-link'>
@@ -205,7 +216,7 @@ class RestaurantView extends Component {
                     <Row>
                         <Col xs={12}>
                             <ProductList
-                                products={this.state.products.filter(product => product.category === this.state.selectedSection)}
+                                products={this.state.filteredProducts}
                                 addProduct={this.addProduct}
                                 removeProduct={this.removeProduct} />
                         </Col>
