@@ -39,15 +39,6 @@ class RestaurantView extends Component {
         super(props);
         this.state = {
             products: [],
-            restaurantData: {
-                name: 'Buffalo Wild Wings',
-                img: 'https://www.buffalowildwings.com/globalassets/bww-logo_rgb_icon.png',
-                openingTime: '09:00',
-                closingTime: '19:00',
-                cash: false,
-                card: true,
-                phone: '8111234567',
-            },
             menuSections: [],
             selectedSection: '',
             addedItems: 0,
@@ -69,12 +60,15 @@ class RestaurantView extends Component {
                     snapshot.forEach(restaurantsDoc => {
                         const productsRef = restaurantsRef.doc(restaurantsDoc.id).collection("products");
                         productsRef.get().then(snapshot => {
-                            const products = [];
+                            let products = new Map();
                             const menuSections = [];
                             snapshot.forEach((productsDoc, index) => {
                                 const data = productsDoc.data();
                                 if(data.isAvailable) {
-                                    products.push({
+                                    //console.log(data);
+                                    let categoryProducts = [];
+                                    let category = data.category;
+                                    let product = {
                                         id: data.id,
                                         name: data.name,
                                         img: data.img ? data.img : restaurant.img,
@@ -82,9 +76,20 @@ class RestaurantView extends Component {
                                         price: data.price,
                                         addedOfProduct: 0,
                                         category: data.category
-                                    })
+                                    };
+
+                                    if(products.has(category)) {
+                                        categoryProducts = products.get(category);
+                                        categoryProducts.push(product);
+                                        products.set(category, categoryProducts);
+                                    } else {
+                                        categoryProducts.push(product);
+                                        products.set(category, categoryProducts);
+                                    }
+                        
                                     if (menuSections.indexOf(data.category) === -1) menuSections.push(data.category);
                                 }
+                                console.log(products);
                             })
                             this.setState({ restaurant, products, menuSections, selectedSection: menuSections[0] })
                         })
@@ -205,7 +210,7 @@ class RestaurantView extends Component {
                     <Row>
                         <Col xs={12}>
                             <ProductList
-                                products={this.state.products.filter(product => product.category === this.state.selectedSection)}
+                                products={this.state.products/*.filter(product => product.category === this.state.selectedSection)*/}
                                 addProduct={this.addProduct}
                                 removeProduct={this.removeProduct} />
                         </Col>
