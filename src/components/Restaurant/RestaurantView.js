@@ -6,7 +6,7 @@ import Searchbar from '../common/Searchbar';
 import Button from '../common/Button';
 import { Link } from "react-router-dom";
 import { ArrowLeft, Phone, ShoppingBag, Clock, Money, BankCards } from '../../icons/icons';
-import { Modal } from 'react-bootstrap';
+import { Modal, Spinner } from 'react-bootstrap';
 
 const { db } = require('../../firebase');
 
@@ -51,6 +51,7 @@ class RestaurantView extends Component {
             productToSee: {},
             seeMore: false,
             productToDelete: {},
+            isLoading: true
         }
 
         this.addProduct = this.addProduct.bind(this);
@@ -61,7 +62,7 @@ class RestaurantView extends Component {
 
     componentDidMount() {
         if (!this.props.routerProps.history.location.state) return this.props.routerProps.history.push('/');
-        
+
         let restaurant = this.props.routerProps.history.location.state.detail;
         const locationsRef = db.collection('locations');
         locationsRef.limit(1).get().then(snapshot => {
@@ -76,7 +77,7 @@ class RestaurantView extends Component {
                             let refArray = [];
                             snapshot.forEach((productsDoc, index) => {
                                 const data = productsDoc.data();
-                                if(data.isAvailable) {
+                                if (data.isAvailable) {
                                     let categoryProducts = [];
                                     let category = data.category;
 
@@ -90,7 +91,7 @@ class RestaurantView extends Component {
                                         category: data.category
                                     };
 
-                                    if(products.has(category)) {
+                                    if (products.has(category)) {
                                         categoryProducts = products.get(category);
                                         categoryProducts.push(product);
                                         products.set(category, categoryProducts);
@@ -98,11 +99,11 @@ class RestaurantView extends Component {
                                         categoryProducts.push(product);
                                         products.set(category, categoryProducts);
                                     }
-                        
+
                                     if (menuSections.indexOf(data.category) === -1) menuSections.push(data.category);
                                 }
                             })
-                            this.setState({ restaurant, products, filteredProducts: products, menuSections, selectedSection: menuSections[0] })
+                            this.setState({ restaurant, products, filteredProducts: products, menuSections, selectedSection: menuSections[0], isLoading: false })
                         })
                     })
                 }).catch(err => {
@@ -122,9 +123,9 @@ class RestaurantView extends Component {
     trackScrolling = () => {
         [...this.state.products].map(([key, value]) => {
             let element = document.getElementById(key);
-            if(element) {
+            if (element) {
                 let position = element.getBoundingClientRect().top;
-                if(position <= 165) {
+                if (position <= 165) {
                     this.selectSection(key);
                 }
             }
@@ -132,7 +133,7 @@ class RestaurantView extends Component {
     }
 
     selectSection(selectedSection) {
-        this.setState({selectedSection});
+        this.setState({ selectedSection });
     }
 
     handleSearch(e) {
@@ -143,8 +144,8 @@ class RestaurantView extends Component {
         //console.log(stateProducts);
 
         let products = []
-        for(let i = 0; i < stateProducts.length; i++) {
-            for(let j = 0; j < stateProducts[i].length; j++) {
+        for (let i = 0; i < stateProducts.length; i++) {
+            for (let j = 0; j < stateProducts[i].length; j++) {
                 products.push(stateProducts[i][j]);
             }
         }
@@ -155,10 +156,10 @@ class RestaurantView extends Component {
 
         let filteredProducts = new Map();
 
-        for(let i in products) {
+        for (let i in products) {
             let product = products[i];
             let categoryProducts = [];
-            if(filteredProducts.has(product.category)) {
+            if (filteredProducts.has(product.category)) {
                 categoryProducts = filteredProducts.get(product.category);
                 categoryProducts.push(product);
                 filteredProducts.set(product.category, categoryProducts);
@@ -179,8 +180,8 @@ class RestaurantView extends Component {
 
         let products = productsInCategory.get(category);
 
-        for(let i = 0; i < products.length; i++) {
-            if(products[i].id === productId) {
+        for (let i = 0; i < products.length; i++) {
+            if (products[i].id === productId) {
                 products[i].addedOfProduct = addedOfProduct;
                 productsInCategory.set(category, products);
             }
@@ -197,15 +198,15 @@ class RestaurantView extends Component {
         let products = productsInCategory.get(category);
         console.log(products);
 
-        for(let i = 0; i < products.length; i++) {
-            if(products[i].id === productId) {
-                if(addedOfProduct === -1) {
+        for (let i = 0; i < products.length; i++) {
+            if (products[i].id === productId) {
+                if (addedOfProduct === -1) {
                     addedItems = 0;
                     products[i].addedOfProduct = 0;
                     productsInCategory.set(category, products);
-                    this.setState({ deleteProductModalShow: false});
-                } else if(products[i].addedOfProduct === 1) {
-                    this.setState({ deleteProductModalShow: true, productToDelete: products[i]});
+                    this.setState({ deleteProductModalShow: false });
+                } else if (products[i].addedOfProduct === 1) {
+                    this.setState({ deleteProductModalShow: true, productToDelete: products[i] });
                 } else {
                     addedItems = addedOfProduct;
                     products[i].addedOfProduct = addedOfProduct;
@@ -218,7 +219,7 @@ class RestaurantView extends Component {
     }
 
     seeMoreProduct(productToSee) {
-        this.setState({productToSee, seeMore: true})
+        this.setState({ productToSee, seeMore: true })
     }
 
     render() {
@@ -233,7 +234,7 @@ class RestaurantView extends Component {
                             </Link>
                         </Col>
                         <Col>
-                            <Searchbar placeholder='Busca un producto' onChange={this.handleSearch.bind(this)} value={this.state.searchInput}/>
+                            <Searchbar placeholder='Busca un producto' onChange={this.handleSearch.bind(this)} value={this.state.searchInput} />
                         </Col>
                         <Col xs='auto' className='vertical-center'>
                             <Link to='/carrito' className='shopping-link'>
@@ -244,78 +245,88 @@ class RestaurantView extends Component {
                             </Link>
                         </Col>
                     </Row>
-                    <Row className='mb-2'>
-                        <Col xs='auto'>
-                            <img src={restaurant.img} className='restaurant-img' loading='lazy' />
-                        </Col>
-                        <Col xs md={4}>
-                            <Row>
+                    {this.state.isLoading ?
+                        <div className='text-center my-auto'>
+                            <Spinner animation="border" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </Spinner>
+                        </div>
+                        :
+                        <>
+                            <Row className='mb-2'>
+                                <Col xs='auto'>
+                                    <img src={restaurant.img} className='restaurant-img' loading='lazy' />
+                                </Col>
+                                <Col xs md={4}>
+                                    <Row>
+                                        <Col xs={12}>
+                                            <h4 className='m-0'>{restaurant.name}</h4>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={12}>
+                                            <p className='text-smaller'><Clock className='icon' /> {restaurant.openingTime} - {restaurant.closingTime}</p>
+                                        </Col>
+                                    </Row>
+                                    {restaurant.phone &&
+                                        <Row className='mb-2'>
+                                            <Col xs={12}>
+                                                <a className='text-smaller restaurant-phone' href={`tel:${restaurant.phone}`}><Phone className='icon' /> {restaurant.phone}</a>
+                                            </Col>
+                                        </Row>
+                                    }
+                                    <Row className='no-gutters mt-auto'>
+                                        {restaurant.cash &&
+                                            <Col xs='auto' className='pr-1'>
+                                                <div className='cash-pill'>
+                                                    <p className='text-smallest m-0'><Money className='icon' /> Efectivo</p>
+                                                </div>
+                                            </Col>
+                                        }
+                                        {restaurant.card &&
+                                            <Col xs='auto'>
+                                                <div className='card-pill'>
+                                                    <p className='text-smallest m-0'><BankCards className='icon' /> Tarjeta</p>
+                                                </div>
+                                            </Col>
+                                        }
+                                    </Row>
+                                </Col>
+                            </Row>
+                            <Row className='restaurant-sections pb-4 pt-2'>
                                 <Col xs={12}>
-                                    <h4 className='m-0'>{restaurant.name}</h4>
+                                    <ul className='menu-sections-list'>
+                                        {this.state.menuSections.map((section, i) => (
+                                            <li
+                                                key={i}
+                                                className={`menu-sections-item ${this.state.selectedSection === section && 'active'}`}
+                                                onClick={() => this.setState({ selectedSection: section })}
+                                            >
+                                                <a href={`#${section}`}>{section}</a>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col xs={12}>
-                                    <p className='text-smaller'><Clock className='icon' /> {restaurant.openingTime} - {restaurant.closingTime}</p>
+                                    <ProductList
+                                        products={this.state.filteredProducts}
+                                        addProduct={this.addProduct}
+                                        removeProduct={this.removeProduct}
+                                        selectSection={this.selectSection}
+                                        refArray={this.state.refArray}
+                                        seeMoreProduct={this.seeMoreProduct}
+                                    />
                                 </Col>
                             </Row>
-                            {restaurant.phone &&
-                                <Row className='mb-2'>
-                                    <Col xs={12}>
-                                        <a className='text-smaller restaurant-phone' href={`tel:${restaurant.phone}`}><Phone className='icon' /> {restaurant.phone}</a>
-                                    </Col>
-                                </Row>
-                            }
-                            <Row className='no-gutters mt-auto'>
-                                {restaurant.cash &&
-                                    <Col xs='auto' className='pr-1'>
-                                        <div className='cash-pill'>
-                                            <p className='text-smallest m-0'><Money className='icon' /> Efectivo</p>
-                                        </div>
-                                    </Col>
-                                }
-                                {restaurant.card &&
-                                    <Col xs='auto'>
-                                        <div className='card-pill'>
-                                            <p className='text-smallest m-0'><BankCards className='icon' /> Tarjeta</p>
-                                        </div>
-                                    </Col>
-                                }
-                            </Row>
-                        </Col>
-                    </Row>
-                    <Row className='restaurant-sections pb-4 pt-2'>
-                        <Col xs={12}>
-                            <ul className='menu-sections-list'>
-                                {this.state.menuSections.map((section, i) => (
-                                    <li
-                                        key={i}
-                                        className={`menu-sections-item ${this.state.selectedSection === section && 'active'}`}
-                                        onClick={() => this.setState({ selectedSection: section })}
-                                    >
-                                        <a href={`#${section}`}>{section}</a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={12}>
-                            <ProductList
-                                products={this.state.filteredProducts}
-                                addProduct={this.addProduct}
-                                removeProduct={this.removeProduct}
-                                selectSection={this.selectSection}
-                                refArray={this.state.refArray}
-                                seeMoreProduct={this.seeMoreProduct}
-                            />
-                        </Col>
-                    </Row>
+                        </>
+                    }
                     <SeeMore
                         show={this.state.seeMore}
                         product={this.state.productToSee}
                         addProduct={this.addProduct}
-                        onClose={() => this.setState({seeMore: false})}
+                        onClose={() => this.setState({ seeMore: false })}
                     />
                 </Container>
                 <DeleteProductModal
