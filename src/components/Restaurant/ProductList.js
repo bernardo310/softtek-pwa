@@ -25,9 +25,11 @@ class ProductList extends Component {
                                             </Col>
                                         </Row>
                                     </Col>
-                                    <Col xs='auto'>
-                                        <img src={product.img} className='list-img' loading='lazy' />
-                                    </Col>
+                                    {product.img &&
+                                        <Col xs='auto'>
+                                            <img src={product.img} className='list-img' loading='lazy' />
+                                        </Col>
+                                    }
                                 </Row>
                                 <Row className='mt-3 justify-content-between'>
                                     <Col xs='auto'>
