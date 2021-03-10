@@ -39,6 +39,8 @@ class RestaurantView extends Component {
         super(props);
         this.state = {
             products: [],
+            filteredProducts: [],
+            searchInput: '',
             menuSections: [],
             selectedSection: '',
             addedItems: 0,
@@ -74,7 +76,7 @@ class RestaurantView extends Component {
                                     let product = {
                                         id: data.id,
                                         name: data.name,
-                                        img: data.img ? data.img : restaurant.img,
+                                        img: data.img ? data.img : undefined,
                                         description: data.description,
                                         price: data.price,
                                         addedOfProduct: 0,
@@ -93,7 +95,7 @@ class RestaurantView extends Component {
                                     if (menuSections.indexOf(data.category) === -1) menuSections.push(data.category);
                                 }
                             })
-                            this.setState({ restaurant, products, menuSections, selectedSection: menuSections[0]})
+                            this.setState({ restaurant, products, filteredProducts: products, menuSections, selectedSection: menuSections[0] })
                         })
                     })
                 }).catch(err => {
@@ -124,6 +126,15 @@ class RestaurantView extends Component {
 
     selectSection(selectedSection) {
         this.setState({selectedSection});
+    }
+
+    handleSearch(e) {
+        let searchInput = e.target.value;
+        let products = [...this.state.products];
+        products = products.filter(product => {
+            return product.name.toLowerCase().includes(searchInput.toLowerCase())
+        })
+        this.setState({ searchInput, filteredProducts: products });
     }
 
     addProduct(productId) {
@@ -164,7 +175,7 @@ class RestaurantView extends Component {
                             </Link>
                         </Col>
                         <Col>
-                            <Searchbar placeholder='Busca un producto' />
+                            <Searchbar placeholder='Busca un producto' onChange={this.handleSearch.bind(this)} value={this.state.searchInput}/>
                         </Col>
                         <Col xs='auto' className='vertical-center'>
                             <Link to='/carrito' className='shopping-link'>
@@ -233,7 +244,7 @@ class RestaurantView extends Component {
                     <Row>
                         <Col xs={12}>
                             <ProductList
-                                products={this.state.products/*.filter(product => product.category === this.state.selectedSection)*/}
+                                products={this.state.products}
                                 addProduct={this.addProduct}
                                 removeProduct={this.removeProduct}
                                 selectSection={this.selectSection}

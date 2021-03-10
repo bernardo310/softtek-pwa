@@ -11,88 +11,9 @@ class RestaurantsView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            restaurants: [
-                /*{
-                    name: 'Buffalo Wild Wings',
-                    img: 'https://www.buffalowildwings.com/globalassets/bww-logo_rgb_icon.png',
-                    openingTime: '09:00',
-                    closingTime: '19:00',
-                    cash: false,
-                    card: true,
-                },
-                {
-                    name: 'Starbucks',
-                    img: 'https://1000marcas.net/wp-content/uploads/2019/12/Starbucks-Logo.png',
-                    openingTime: '09:00',
-                    closingTime: '19:00',
-                    cash: true,
-                    card: true,
-                },
-                {
-                    name: 'Blatt Salad Haus',
-                    img: 'https://www.franquiciasen.mx/Content/imgAnuncios/bsh-blatt-salat-haus.jpg',
-                    openingTime: '09:00',
-                    closingTime: '19:00',
-                    cash: true,
-                    card: true,
-                },
-                {
-                    name: 'Restaurante con un nombre muy largo',
-                    img: 'https://st2.depositphotos.com/7109552/11377/v/600/depositphotos_113775112-stock-illustration-vintage-restaurant-and-cafe-label.jpg',
-                    openingTime: '09:00',
-                    closingTime: '19:00',
-                    cash: true,
-                    card: false,
-                },
-                {
-                    name: 'McDonalds',
-                    img: 'https://tentulogo.com/wp-content/uploads/2017/07/mcdonalds-logo.jpg',
-                    openingTime: '09:00',
-                    closingTime: '19:00',
-                    cash: false,
-                    card: true,
-                },
-                {
-                    name: 'Buffalo Wild Wings',
-                    img: 'https://www.buffalowildwings.com/globalassets/bww-logo_rgb_icon.png',
-                    openingTime: '09:00',
-                    closingTime: '19:00',
-                    cash: false,
-                    card: true,
-                },
-                {
-                    name: 'Starbucks',
-                    img: 'https://1000marcas.net/wp-content/uploads/2019/12/Starbucks-Logo.png',
-                    openingTime: '09:00',
-                    closingTime: '19:00',
-                    cash: true,
-                    card: true,
-                },
-                {
-                    name: 'Blatt Salad Haus',
-                    img: 'https://www.franquiciasen.mx/Content/imgAnuncios/bsh-blatt-salat-haus.jpg',
-                    openingTime: '09:00',
-                    closingTime: '19:00',
-                    cash: true,
-                    card: true,
-                },
-                {
-                    name: 'Restaurante con un nombre muy largo',
-                    img: 'https://st2.depositphotos.com/7109552/11377/v/600/depositphotos_113775112-stock-illustration-vintage-restaurant-and-cafe-label.jpg',
-                    openingTime: '09:00',
-                    closingTime: '19:00',
-                    cash: true,
-                    card: false,
-                },
-                {
-                    name: 'McDonalds',
-                    img: 'https://tentulogo.com/wp-content/uploads/2017/07/mcdonalds-logo.jpg',
-                    openingTime: '09:00',
-                    closingTime: '19:00',
-                    cash: false,
-                    card: true,
-                },*/
-            ]
+            restaurants: [],
+            filteredRestaurants: [],
+            searchInput: ''
         }
     }
     componentDidMount() {
@@ -114,7 +35,7 @@ class RestaurantsView extends Component {
                             id: data.id
                         })
                     })
-                    this.setState({ restaurants })
+                    this.setState({ restaurants, filteredRestaurants: restaurants })
                 }).catch(err => {
                     console.log("Error getting sub-collection documents", err);
                 })
@@ -124,9 +45,17 @@ class RestaurantsView extends Component {
         });
     }
 
-    //const { currentUser } = useAuth()
+    handleSearch(e) {
+        let searchInput = e.target.value;
+        let restaurants = [...this.state.restaurants];
+        restaurants = restaurants.filter(restaurant => {
+            return restaurant.name.toLowerCase().includes(searchInput.toLowerCase())
+        })
+        this.setState({ searchInput, filteredRestaurants: restaurants });
+    }
+
     render() {
-        //console.log('restt', this.restaurantes)
+        console.log('renderrrr', this.state.searchInput)
         return (
             <>
                 <Menu {...this.props} />
@@ -141,12 +70,12 @@ class RestaurantsView extends Component {
                     </Row>
                     <Row className='mb-4'>
                         <Col xs={12} md={4}>
-                            <Searchbar placeholder='Busca un restaurante'/>
+                            <Searchbar placeholder='Busca un restaurante' onChange={this.handleSearch.bind(this)} value={this.state.searchInput} />
                         </Col>
                     </Row>
                     <Row className='justify-content-center'>
                         <Col xs={12}>
-                            <RestaurantList restaurants={this.state.restaurants} />
+                            <RestaurantList restaurants={this.state.filteredRestaurants} />
                         </Col>
                     </Row>
                 </Container>
