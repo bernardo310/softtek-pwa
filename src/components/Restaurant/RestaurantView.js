@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import ProductList from './ProductList';
-import { Link } from "react-router-dom";
+import SeeMore from './SeeMore';
 import Searchbar from '../common/Searchbar';
+import Button from '../common/Button';
+import { Link } from "react-router-dom";
 import { ArrowLeft, Phone, ShoppingBag, Clock, Money, BankCards } from '../../icons/icons';
 import { Modal } from 'react-bootstrap';
-import Button from '../common/Button';
+
 const { db } = require('../../firebase');
 
 function DeleteProductModal(props) {
@@ -24,11 +26,12 @@ function DeleteProductModal(props) {
             <Modal.Body>
                 <h4>Eliminar producto</h4>
                 <p className='non-bold'>
-                    ¿Seguro que deseas eliminar el producto <b>{props.productName}</b> de <b>{props.restaurantName}</b>?
+                    ¿Seguro que deseas eliminar el producto <b>{props.product.name}</b> de <b>{props.restaurantName}</b>?
           </p>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide} label='Cancelar' />
+                <Button variant='primary' onClick={() => props.removeProduct(props.product.id, props.product.category, -1)} label='Si, eliminiar' />
             </Modal.Footer>
         </Modal>
     );
@@ -45,11 +48,15 @@ class RestaurantView extends Component {
             selectedSection: '',
             addedItems: 0,
             restaurant: [],
+            productToSee: {},
+            seeMore: false,
+            productToDelete: {},
         }
 
         this.addProduct = this.addProduct.bind(this);
         this.removeProduct = this.removeProduct.bind(this);
         this.selectSection = this.selectSection.bind(this);
+        this.seeMoreProduct = this.seeMoreProduct.bind(this);
     }
 
     componentDidMount() {
@@ -164,30 +171,54 @@ class RestaurantView extends Component {
         this.setState({ searchInput, filteredProducts });
     }
 
-    addProduct(productId) {
+    addProduct(productId, category, addedOfProduct) {
         let addedItems = this.state.addedItems;
-        addedItems++;
+        addedItems = addedOfProduct;
 
-        let products = this.state.products;
-        let indexProductToAdd = products.map(item => item.id).indexOf(productId);
-        products[indexProductToAdd].addedOfProduct++;
+        let productsInCategory = this.state.products;
 
-        this.setState({ addedItems, products });
-    }
+        let products = productsInCategory.get(category);
 
-    removeProduct(productId) {
-        let addedItems = this.state.addedItems;
-        addedItems--;
-
-        let products = this.state.products;
-        let indexProductToRemove = products.map(item => item.id).indexOf(productId);
-        if (products[indexProductToRemove].addedOfProduct === 1) {
-            this.setState({ deleteProductModalShow: true });
-        } else {
-            products[indexProductToRemove].addedOfProduct--;
+        for(let i = 0; i < products.length; i++) {
+            if(products[i].id === productId) {
+                products[i].addedOfProduct = addedOfProduct;
+                productsInCategory.set(category, products);
+            }
         }
 
-        this.setState({ addedItems, products });
+        this.setState({ addedItems, products: productsInCategory, seeMore: false });
+    }
+
+    removeProduct(productId, category, addedOfProduct) {
+        let addedItems = this.state.addedItems;
+
+        let productsInCategory = this.state.products;
+
+        let products = productsInCategory.get(category);
+        console.log(products);
+
+        for(let i = 0; i < products.length; i++) {
+            if(products[i].id === productId) {
+                if(addedOfProduct === -1) {
+                    addedItems = 0;
+                    products[i].addedOfProduct = 0;
+                    productsInCategory.set(category, products);
+                    this.setState({ deleteProductModalShow: false});
+                } else if(products[i].addedOfProduct === 1) {
+                    this.setState({ deleteProductModalShow: true, productToDelete: products[i]});
+                } else {
+                    addedItems = addedOfProduct;
+                    products[i].addedOfProduct = addedOfProduct;
+                    productsInCategory.set(category, products);
+                }
+            }
+        }
+
+        this.setState({ addedItems, products: productsInCategory });
+    }
+
+    seeMoreProduct(productToSee) {
+        this.setState({productToSee, seeMore: true})
     }
 
     render() {
@@ -276,14 +307,23 @@ class RestaurantView extends Component {
                                 removeProduct={this.removeProduct}
                                 selectSection={this.selectSection}
                                 refArray={this.state.refArray}
+                                seeMoreProduct={this.seeMoreProduct}
                             />
                         </Col>
                     </Row>
+                    <SeeMore
+                        show={this.state.seeMore}
+                        product={this.state.productToSee}
+                        addProduct={this.addProduct}
+                        onClose={() => this.setState({seeMore: false})}
+                    />
                 </Container>
                 <DeleteProductModal
                     show={this.state.deleteProductModalShow}
                     onHide={() => this.setState({ deleteProductModalShow: false })}
                     restaurantName={restaurant.name}
+                    product={this.state.productToDelete}
+                    removeProduct={this.removeProduct}
                 />
             </>
         );

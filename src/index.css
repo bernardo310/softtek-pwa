@@ -164,10 +164,6 @@ small, .text-small, .text-smaller, .text-smallest {
   color: white;
 }
 
-.button.primary:disabled {
-  filter: opacity(60%);
-  box-shadow: none;
-}
 
 .button.block {
   display: block;
@@ -180,6 +176,11 @@ small, .text-small, .text-smaller, .text-smallest {
 
 .button.secondary p {
   color: var(--main);
+}
+
+.button.primary:disabled, .button.secondary:disabled {
+  filter: opacity(40%);
+  box-shadow: none;
 }
 
 .button p {
@@ -440,6 +441,63 @@ nav .nav-link.active .icon circle, nav .nav-link.active .icon path, nav .nav-lin
 .product-section {
   scroll-snap-margin-top: 160px;
   scroll-margin-top: 160px;
+}
+
+.error {
+  color: var(--error);
+}
+
+.see-more-card {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 9;
+  background-color: var(--background-color);
+  overflow-y: none;
+  left: 0;
+  right: 0;
+}
+
+.see-more-card.animating-in{
+  bottom: 0px;
+  transition: bottom 0.5s ease-out;
+}
+
+.see-more-card.animating-out{
+  bottom: -100vh;
+  transition: bottom 0.5s ease-out;
+}
+
+.see-more-product-img {
+  top: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+}
+
+.see-more-product-img img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.see-more-product-img::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  background: linear-gradient(to top, transparent 0%, #FFFFFF 100%);
+}
+
+.see-more-card .header-icon {
+  z-index: 99;
+}
+
+.see-more-product-img ~ .see-more-product-content {
+  margin-top: 220px;
 }
 
 @media only screen and (min-width: 768px) {
