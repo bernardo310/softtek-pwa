@@ -130,11 +130,38 @@ class RestaurantView extends Component {
 
     handleSearch(e) {
         let searchInput = e.target.value;
-        let products = [...this.state.products];
+        let stateProducts = [...this.state.products];
+        stateProducts = Array.from(stateProducts, ([category, product]) => (product));
+
+        //console.log(stateProducts);
+
+        let products = []
+        for(let i = 0; i < stateProducts.length; i++) {
+            for(let j = 0; j < stateProducts[i].length; j++) {
+                products.push(stateProducts[i][j]);
+            }
+        }
+
         products = products.filter(product => {
             return product.name.toLowerCase().includes(searchInput.toLowerCase())
         })
-        this.setState({ searchInput, filteredProducts: products });
+
+        let filteredProducts = new Map();
+
+        for(let i in products) {
+            let product = products[i];
+            let categoryProducts = [];
+            if(filteredProducts.has(product.category)) {
+                categoryProducts = filteredProducts.get(product.category);
+                categoryProducts.push(product);
+                filteredProducts.set(product.category, categoryProducts);
+            } else {
+                categoryProducts.push(product);
+                filteredProducts.set(product.category, categoryProducts);
+            }
+        }
+
+        this.setState({ searchInput, filteredProducts });
     }
 
     addProduct(productId) {
