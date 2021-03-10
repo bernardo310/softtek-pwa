@@ -8,7 +8,7 @@ class ProductList extends Component {
         return(
             <>
                 {[...this.props.products].map(([key, value]) => (
-                    <div id={key} className='mb-5 product-section' >
+                    <div id={key} className='mb-5 product-section' key={key} >
                         <h3 className='mb-4'>{key}</h3>
                         {value.map((product) => (
                             <div key={product.id}>
@@ -36,17 +36,17 @@ class ProductList extends Component {
                                         <p className='text-smaller main-text'>${product.price}</p>
                                     </Col>
                                     <Col xs='auto' className='ml-auto pr-0'>
-                                        <Button label='Ver más' />
+                                        <Button label='Ver más' onClick={() => this.props.seeMoreProduct(product)} />
                                     </Col>
                                     <Col xs='auto'>
                                         {product.addedOfProduct > 0 ?
                                             <div className='flex'>
-                                                <Button label='-' onClick={() => this.props.removeProduct(product.id)} />
+                                                <Button label='-' onClick={() => this.props.removeProduct(product.id, product.category, product.addedOfProduct - 1)} />
                                                 <p className='mx-3'>{product.addedOfProduct}</p>
-                                                <Button label='+' variant='primary' onClick={() => this.props.addProduct(product.id)} />
+                                                <Button label='+' variant='primary' onClick={() => this.props.addProduct(product.id, product.category, product.addedOfProduct + 1)} />
                                             </div>
                                         :
-                                            <Button label='¡Agregar!' variant='primary' onClick={() => this.props.addProduct(product.id)} />
+                                            <Button label='¡Agregar!' variant='primary' onClick={() => this.props.addProduct(product.id, product.category, product.addedOfProduct + 1)} />
                                         }
                                     </Col>
                                 </Row>
