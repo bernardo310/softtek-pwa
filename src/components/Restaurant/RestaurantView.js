@@ -41,15 +41,6 @@ class RestaurantView extends Component {
             products: [],
             filteredProducts: [],
             searchInput: '',
-            restaurantData: {
-                name: 'Buffalo Wild Wings',
-                img: 'https://www.buffalowildwings.com/globalassets/bww-logo_rgb_icon.png',
-                openingTime: '09:00',
-                closingTime: '19:00',
-                cash: false,
-                card: true,
-                phone: '8111234567',
-            },
             menuSections: [],
             selectedSection: '',
             addedItems: 0,
@@ -58,10 +49,12 @@ class RestaurantView extends Component {
 
         this.addProduct = this.addProduct.bind(this);
         this.removeProduct = this.removeProduct.bind(this);
+        this.selectSection = this.selectSection.bind(this);
     }
 
     componentDidMount() {
-        if (!this.props.routerProps.history.location.state) return this.props.routerProps.history.push('/')
+        if (!this.props.routerProps.history.location.state) return this.props.routerProps.history.push('/');
+        
         let restaurant = this.props.routerProps.history.location.state.detail;
         const locationsRef = db.collection('locations');
         locationsRef.limit(1).get().then(snapshot => {
@@ -71,12 +64,16 @@ class RestaurantView extends Component {
                     snapshot.forEach(restaurantsDoc => {
                         const productsRef = restaurantsRef.doc(restaurantsDoc.id).collection("products");
                         productsRef.get().then(snapshot => {
-                            const products = [];
+                            let products = new Map();
                             const menuSections = [];
+                            let refArray = [];
                             snapshot.forEach((productsDoc, index) => {
                                 const data = productsDoc.data();
                                 if(data.isAvailable) {
-                                    products.push({
+                                    let categoryProducts = [];
+                                    let category = data.category;
+
+                                    let product = {
                                         id: data.id,
                                         name: data.name,
                                         img: data.img ? data.img : undefined,
@@ -84,7 +81,17 @@ class RestaurantView extends Component {
                                         price: data.price,
                                         addedOfProduct: 0,
                                         category: data.category
-                                    })
+                                    };
+
+                                    if(products.has(category)) {
+                                        categoryProducts = products.get(category);
+                                        categoryProducts.push(product);
+                                        products.set(category, categoryProducts);
+                                    } else {
+                                        categoryProducts.push(product);
+                                        products.set(category, categoryProducts);
+                                    }
+                        
                                     if (menuSections.indexOf(data.category) === -1) menuSections.push(data.category);
                                 }
                             })
@@ -98,6 +105,27 @@ class RestaurantView extends Component {
         }).catch(err => {
             console.log(err)
         });
+        document.addEventListener('scroll', this.trackScrolling);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('scroll', this.trackScrolling);
+    }
+
+    trackScrolling = () => {
+        [...this.state.products].map(([key, value]) => {
+            let element = document.getElementById(key);
+            if(element) {
+                let position = element.getBoundingClientRect().top;
+                if(position <= 165) {
+                    this.selectSection(key);
+                }
+            }
+        });
+    }
+
+    selectSection(selectedSection) {
+        this.setState({selectedSection});
     }
 
     handleSearch(e) {
@@ -216,9 +244,12 @@ class RestaurantView extends Component {
                     <Row>
                         <Col xs={12}>
                             <ProductList
-                                products={this.state.filteredProducts}
+                                products={this.state.products}
                                 addProduct={this.addProduct}
-                                removeProduct={this.removeProduct} />
+                                removeProduct={this.removeProduct}
+                                selectSection={this.selectSection}
+                                refArray={this.state.refArray}
+                            />
                         </Col>
                     </Row>
                 </Container>
