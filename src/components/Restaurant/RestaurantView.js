@@ -47,10 +47,12 @@ class RestaurantView extends Component {
 
         this.addProduct = this.addProduct.bind(this);
         this.removeProduct = this.removeProduct.bind(this);
+        this.selectSection = this.selectSection.bind(this);
     }
 
     componentDidMount() {
-        if (!this.props.routerProps.history.location.state) return this.props.routerProps.history.push('/')
+        if (!this.props.routerProps.history.location.state) return this.props.routerProps.history.push('/');
+        
         let restaurant = this.props.routerProps.history.location.state.detail;
         const locationsRef = db.collection('locations');
         locationsRef.limit(1).get().then(snapshot => {
@@ -62,12 +64,13 @@ class RestaurantView extends Component {
                         productsRef.get().then(snapshot => {
                             let products = new Map();
                             const menuSections = [];
+                            let refArray = [];
                             snapshot.forEach((productsDoc, index) => {
                                 const data = productsDoc.data();
                                 if(data.isAvailable) {
-                                    //console.log(data);
                                     let categoryProducts = [];
                                     let category = data.category;
+
                                     let product = {
                                         id: data.id,
                                         name: data.name,
@@ -89,9 +92,8 @@ class RestaurantView extends Component {
                         
                                     if (menuSections.indexOf(data.category) === -1) menuSections.push(data.category);
                                 }
-                                console.log(products);
                             })
-                            this.setState({ restaurant, products, menuSections, selectedSection: menuSections[0] })
+                            this.setState({ restaurant, products, menuSections, selectedSection: menuSections[0]})
                         })
                     })
                 }).catch(err => {
@@ -101,6 +103,27 @@ class RestaurantView extends Component {
         }).catch(err => {
             console.log(err)
         });
+        document.addEventListener('scroll', this.trackScrolling);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('scroll', this.trackScrolling);
+    }
+
+    trackScrolling = () => {
+        [...this.state.products].map(([key, value]) => {
+            let element = document.getElementById(key);
+            if(element) {
+                let position = element.getBoundingClientRect().top;
+                if(position <= 165) {
+                    this.selectSection(key);
+                }
+            }
+        });
+    }
+
+    selectSection(selectedSection) {
+        this.setState({selectedSection});
     }
 
     addProduct(productId) {
@@ -212,7 +235,10 @@ class RestaurantView extends Component {
                             <ProductList
                                 products={this.state.products/*.filter(product => product.category === this.state.selectedSection)*/}
                                 addProduct={this.addProduct}
-                                removeProduct={this.removeProduct} />
+                                removeProduct={this.removeProduct}
+                                selectSection={this.selectSection}
+                                refArray={this.state.refArray}
+                            />
                         </Col>
                     </Row>
                 </Container>

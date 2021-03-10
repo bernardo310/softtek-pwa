@@ -437,6 +437,11 @@ nav .nav-link.active .icon circle, nav .nav-link.active .icon path, nav .nav-lin
   align-items: center;
 }
 
+.product-section {
+  scroll-snap-margin-top: 160px;
+  scroll-margin-top: 160px;
+}
+
 @media only screen and (min-width: 768px) {
   .navbar {
     top: 0;
