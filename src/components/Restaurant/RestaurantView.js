@@ -244,7 +244,7 @@ class RestaurantView extends Component {
                     <Row>
                         <Col xs={12}>
                             <ProductList
-                                products={this.state.products}
+                                products={this.state.filteredProducts}
                                 addProduct={this.addProduct}
                                 removeProduct={this.removeProduct}
                                 selectSection={this.selectSection}
