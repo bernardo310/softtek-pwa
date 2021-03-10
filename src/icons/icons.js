@@ -243,8 +243,8 @@ aria-describedby="desc" role="img" xmlnsXlink="http://www.w3.org/1999/xlink" cla
   <title>Angle Down</title>
   <desc>A line styled icon from Orion Icon Library.</desc>
   <path data-name="layer1"
-  fill="none" stroke="#202020" stroke-miterlimit="10" stroke-width="2" d="M20 26l11.994 14L44 26"
-  stroke-linejoin="round" stroke-linecap="round"></path>
+  fill="none" stroke="#202020" strokeMiterlimit="10" strokeWidth="2" d="M20 26l11.994 14L44 26"
+  strokeLinejoin="round" strokeLinecap="round"></path>
 </svg>
 );
 
