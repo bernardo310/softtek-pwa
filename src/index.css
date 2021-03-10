@@ -310,6 +310,14 @@ a .icon {
   z-index: 1024;
 }
 
+.navbar-nav {
+  width: 100%;
+}
+
+a.nav-link {
+  margin-bottom: 0 !important;
+}
+
 nav .nav-link {
   color: var(--gray-text) !important;
 }
