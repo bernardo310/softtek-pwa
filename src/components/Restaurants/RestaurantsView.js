@@ -55,7 +55,6 @@ class RestaurantsView extends Component {
     }
 
     render() {
-        console.log('renderrrr', this.state.searchInput)
         return (
             <>
                 <Menu {...this.props} />
