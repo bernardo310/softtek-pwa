@@ -4,6 +4,7 @@ import RestaurantList from './RestaurantList';
 import Searchbar from '../common/Searchbar';
 import Menu from '../common/Menu';
 import { ShoppingBag } from '../../icons/icons';
+import { Link } from 'react-router-dom';
 const { db } = require('../../firebase');
 //import { useAuth } from '../contexts/AuthContext'
 
@@ -64,7 +65,9 @@ class RestaurantsView extends Component {
                             <h1>Restaurantes</h1>
                         </Col>
                         <Col xs='auto' className='vertical-center'>
-                            <ShoppingBag className='header-icon' />
+                            <Link to='/carrito' className='shopping-link'>
+                                <ShoppingBag className='header-icon mb-0' />
+                            </Link>
                         </Col>
                     </Row>
                     <Row className='mb-4'>
