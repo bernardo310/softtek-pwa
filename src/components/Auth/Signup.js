@@ -27,14 +27,13 @@ export default function Signup() {
             history.push('/')
         } catch(err) {
             console.log(err)
-            setError('Error creando cuenta')
+            setError('Ya existe una cuenta con este correo')
         }
         setLoading(false);
     }
 
     async function handleGoogleLogIn(e) {
         e.preventDefault();
-        if (passwordRef.current.value !== confirmpasswordRef.current.value) return setError('Las contraseñas deben ser iguales')
         await loginWithGoogle(emailRef.current.value, passwordRef.current.value);
         history.push('/')
     }

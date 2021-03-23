@@ -11,6 +11,8 @@ const app = firebase.initializeApp({
     appId: process.env.REACT_APP_FIREBASE_APP_ID
 })
 
+firebase.firestore().enablePersistence();
+
 export const auth = app.auth()
 export const db = app.firestore()
 export default app;
