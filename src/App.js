@@ -8,6 +8,7 @@ import HelpView from './components/Help/HelpView';
 import { AuthProvider } from './contexts/AuthContext';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import RestaurantView from './components/Restaurant/RestaurantView';
+import CartView from './components/Cart/CartView';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path='/login' component={Login} />
           <PrivateRoute path='/ordenes' component={OrdersView} />
           <PrivateRoute path='/ayuda' component={HelpView} />
+          <PrivateRoute path='/carrito' component={CartView} />
           <Route path='/restaurant/:name' render={routerProps => <RestaurantView routerProps={routerProps} />} />
         </Switch>
       </AuthProvider>

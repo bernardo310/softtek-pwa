@@ -41,9 +41,9 @@ class ProductList extends Component {
                                     <Col xs='auto'>
                                         {product.addedOfProduct > 0 ?
                                             <div className='flex'>
-                                                <Button label='-' onClick={() => this.props.removeProduct(product.id, product.category, product.addedOfProduct - 1)} />
+                                                <Button label='-' className='square-button' onClick={() => this.props.removeProduct(product.id, product.category, product.addedOfProduct - 1)} />
                                                 <p className='mx-3'>{product.addedOfProduct}</p>
-                                                <Button label='+' variant='primary' onClick={() => this.props.addProduct(product.id, product.category, product.addedOfProduct + 1)} />
+                                                <Button label='+' className='square-button' variant='primary' onClick={() => this.props.addProduct(product.id, product.category, product.addedOfProduct + 1)} />
                                             </div>
                                         :
                                             <Button label='¡Agregar!' variant='primary' onClick={() => this.props.addProduct(product.id, product.category, product.addedOfProduct + 1)} />

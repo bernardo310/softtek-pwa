@@ -14,7 +14,7 @@ function DeleteProductModal(props) {
     return (
         <Modal
             {...props}
-            size="sm"
+            size="md"
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
@@ -196,7 +196,6 @@ class RestaurantView extends Component {
         let productsInCategory = this.state.products;
 
         let products = productsInCategory.get(category);
-        console.log(products);
 
         for (let i = 0; i < products.length; i++) {
             if (products[i].id === productId) {

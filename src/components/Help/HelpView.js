@@ -35,7 +35,7 @@ class HelpView extends Component {
                 <Container className='mb-5 mt-3'>
                     <Row className='justify-content-between'>
                         <Col xs='auto' className='vertical-center'>
-                            <h1>Ayuda</h1>
+                            <h1 className='mb-0'>Ayuda</h1>
                         </Col>
                         <Col xs='auto' className='vertical-center'>
                             <Link to='/carrito' className='shopping-link'>
