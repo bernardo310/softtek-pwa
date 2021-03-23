@@ -14,7 +14,7 @@ function DeleteProductModal(props) {
     return (
         <Modal
             {...props}
-            size="sm"
+            size="md"
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
