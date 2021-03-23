@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
 import firebase from 'firebase/app';
 
 const AuthContext = React.createContext();
@@ -12,17 +12,66 @@ export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState();
     const [loading, setLoading] = useState(true)
 
-    function signup(email, password) {
-        return auth.createUserWithEmailAndPassword(email, password)
+    async function signup(email, password) {
+        try {
+            const user = await auth.createUserWithEmailAndPassword(email, password);
+            const userData = {
+                id: user.user.uid,
+                isUser: true,
+                mail: user.user.email,
+                name: null,
+                phoneNumber: null
+            }
+            const userExists = await db.collection('users').doc(userData.id).get().exists;
+            if (!userExists) {
+                //create new user
+                await db.collection('users').doc(userData.id).set(Object.assign({}, userData));
+                //create empty cart for user
+                return await db.collection('carts').doc().set({
+                    noProducts: 0,
+                    restaurantes: [],
+                    total: 0,
+                    userId: userData.id,
+                    waitingTime: 0
+                })
+            }
+        } catch (err) {
+            throw err;
+        }
     }
-    
+
     function login(email, password) {
         return auth.signInWithEmailAndPassword(email, password)
     }
 
-    function loginWithGoogle() {
-        const googleProvider = new firebase.auth.GoogleAuthProvider();
-        return auth.signInWithPopup(googleProvider)
+    async function loginWithGoogle() {
+        try {
+            const googleProvider = new firebase.auth.GoogleAuthProvider();
+            const user = await auth.signInWithPopup(googleProvider);
+            const userData = {
+                id: user.user.uid,
+                isUser: true,
+                mail: user.user.email,
+                name: user.user.displayName,
+                phoneNumber: user.user.phoneNumber ? user.user.phoneNumber : null
+            }
+            const userExists = await db.collection('users').doc(userData.id).get().exists;
+            if (!userExists) {
+                //create new user
+                await db.collection('users').doc(userData.id).set(Object.assign({}, userData));
+                //create empty cart for user
+                return await db.collection('carts').doc().set({
+                    noProducts: 0,
+                    restaurantes: [],
+                    total: 0,
+                    userId: userData.id,
+                    waitingTime: 0
+                })
+
+            }
+        } catch (err) {
+            throw err
+        }
     }
 
     function logout() {
