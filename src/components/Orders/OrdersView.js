@@ -2,13 +2,84 @@ import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { ShoppingBag } from '../../icons/icons';
-//import OrderList from './OrderList';
+import OrderList from './OrderList';
 import Menu from '../common/Menu';
 
 class OrdersView extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            orders: [
+                {   
+                    id: 0,
+                    restaurantName: 'Buffalo Wild Wings',
+                    status: 'Recibida',
+                    date: '10/01/2020',
+                    total: 320.00,
+                    estimatedDeliveryTime: 15,
+                    parkingSpot: null,
+                    isInParkingSpot: false,
+                    paymentType: 'Efectivo',
+                    products: [
+                        {
+                            id: 0,
+                            addedOfProduct: 1, 
+                            name: 'Boneless grandes'
+                        },
+                        {
+                            id: 1,
+                            addedOfProduct: 1, 
+                            name: 'Boneless medianas'
+                        },
+                    ]
+                },
+                {   
+                    id: 1,
+                    restaurantName: 'Blatt Salat Haus',
+                    status: 'Entregada',
+                    date: '15/12/2019',
+                    total: 280.20,
+                    estimatedDeliveryTime: 15,
+                    parkingSpot: 'B2',
+                    isInParkingSpot: true,
+                    paymentType: 'Tarjeta',
+                    products: [
+                        {
+                            id: 0,
+                            addedOfProduct: 1, 
+                            name: 'Blatt Sanwish Buffalo'
+                        },
+                        {
+                            id: 1,
+                            addedOfProduct: 1, 
+                            name: 'Limonada'
+                        },
+                    ]
+                },
+                {   
+                    id: 2,
+                    restaurantName: 'Starbucks',
+                    status: 'Cancelada',
+                    date: '15/12/2019',
+                    total: 280.20,
+                    estimatedDeliveryTime: 15,
+                    parkingSpot: 'B2',
+                    isInParkingSpot: true,
+                    paymentType: 'Tarjeta',
+                    products: [
+                        {
+                            id: 0,
+                            addedOfProduct: 1, 
+                            name: 'Blatt Sanwish Buffalo'
+                        },
+                        {
+                            id: 1,
+                            addedOfProduct: 1, 
+                            name: 'Limonada'
+                        },
+                    ]
+                },
+            ],
         }
     }
     //const { currentUser } = useAuth()
@@ -30,9 +101,9 @@ class OrdersView extends Component {
                             </Link>
                         </Col>
                     </Row>
-                    <Row className='justify-content-center mt-5'>
+                    <Row className='justify-content-center'>
                         <Col xs={12}>
-                            {/*<OrderList orders={this.state.orders}/>*/}
+                            <OrderList orders={this.state.orders}/>
                         </Col>
                     </Row>
                 </Container>

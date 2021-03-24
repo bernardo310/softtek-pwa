@@ -4,6 +4,7 @@
   --main-light: #FAFCFF;
   --background-color: #FCFCFC;
   --error: #FF3333;
+  --light-error: #FFE5E6;
   --main: #FF6961;
   --main-shadow: rgba(255, 105, 97, 0.4);
   --complementary: #4BC65A;
@@ -12,6 +13,8 @@
   --light-green: #E5FFEB;
   --main-blue: #15F4EE;
   --light-blue: #E7FEFD;
+  --main-orange: #FF8300;
+  --light-orange: #FFF3E5;
   --border-gray: rgba(0, 24, 51, 0.1);
 }
 
@@ -330,6 +333,39 @@ a .icon {
   stroke: var(--main-blue) !important;
 }
 
+.delivered-pill {
+  background-color: var(--light-green);
+  border: 1px solid var(--main-green);
+  border-radius: 2px;
+}
+
+.delivered-pill p {
+  color: var(--main-green);
+  padding: 5px 10px;
+}
+
+.received-pill {
+  background-color: var(--light-orange);
+  border: 1px solid var(--main-orange);
+  border-radius: 2px;
+}
+
+.received-pill p {
+  color: var(--main-orange);
+  padding: 5px 10px;
+}
+
+.cancelled-pill {
+  background-color: var(--light-error);
+  border: 1px solid var(--error);
+  border-radius: 2px;
+}
+
+.cancelled-pill p {
+  color: var(--error);
+  padding: 5px 10px;
+}
+
 .navbar {
   position: sticky;
   height: 45px;
@@ -362,7 +398,7 @@ nav .nav-link.active .icon circle, nav .nav-link.active .icon path, nav .nav-lin
   stroke: var(--main) !important;
 }
 
-.faq-card {
+.faq-card, .order-card {
   border-radius: 5px !important;
   border: none;
   box-shadow: 0px 0px 10px 0px var(--border-gray);
