@@ -572,7 +572,7 @@ nav .nav-link.active .icon circle, nav .nav-link.active .icon path, nav .nav-lin
   margin-top: 220px;
 }
 
-.radio-wrapper {
+.radio-wrapper, .checkbox-wrapper {
   display: block;
   position: relative;
   padding-left: 35px;
@@ -587,7 +587,7 @@ nav .nav-link.active .icon circle, nav .nav-link.active .icon path, nav .nav-lin
 }
 
 /* Hide the browser's default radio button */
-.radio-wrapper input {
+.radio-wrapper input, .checkbox-wrapper input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -605,8 +605,12 @@ nav .nav-link.active .icon circle, nav .nav-link.active .icon path, nav .nav-lin
   border-radius: 50%;
 }
 
+.checkbox-wrapper .checkmark {
+  border-radius: 10%;
+}
+
 /* On mouse-over, add a grey background color */
-.radio-wrapper:hover input ~ .checkmark {
+.radio-wrapper:hover input ~ .checkmark, .checkbox-wrapper:hover input ~ .checkmark{
   background-color: var(--secondary-button);
 }
 
@@ -623,7 +627,7 @@ nav .nav-link.active .icon circle, nav .nav-link.active .icon path, nav .nav-lin
 }
 
 /* Show the indicator (dot/circle) when checked */
-.radio-wrapper input:checked ~ .checkmark:after {
+.radio-wrapper input:checked ~ .checkmark:after, .checkbox-wrapper input:checked ~ .checkmark:after {
   display: block;
 }
 
@@ -635,6 +639,16 @@ nav .nav-link.active .icon circle, nav .nav-link.active .icon path, nav .nav-lin
 	height: 15px;
 	border-radius: 50%;
 	background: var(--main);
+}
+
+/* Style the indicator (dot/circle) */
+.checkbox-wrapper .checkmark:after {
+  top: 4px;
+ left: 4px;
+ width: 15px;
+ height: 15px;
+ border-radius: 10%;
+ background: var(--main);
 }
 
 .square-button {

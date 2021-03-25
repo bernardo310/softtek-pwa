@@ -42,7 +42,12 @@ const OrderList = (props) => {
                             block />
                     </Col>
                     <Col>
-                        <Button variant='primary' label='Cambiar cajón' block />
+                        <Button
+                            variant='primary'
+                            label='Cambiar cajón'
+                            onClick={() => props.showParkingSpotModal(order)}
+                            block
+                        />
                     </Col>
                 </>
             );
@@ -61,16 +66,24 @@ const OrderList = (props) => {
     return(
         <>
             {props.orders.map(order => (
-                <Row>
+                <Row key={order.id}>
                     <Col xs={12}>
                         <Card className='my-2 order-card'>
                             <Card.Body>
                                 <Row className='justify-content-between'>
-                                    <Col>
+                                    <Col className='vertical-center'>
                                         <p className='text-smallest gray-text'>{order.date}</p>
                                     </Col>
                                     <Col xs='auto'>
                                         {renderStatusBlock(order)}
+                                    </Col>
+                                </Row>
+                                <Row className='justify-content-between mt-2'>
+                                    <Col xs='auto'>
+                                        <p>{order.restaurantName}</p>
+                                    </Col>
+                                    <Col xs='auto'>
+                                        <p className='non-bold'>${order.total}</p>
                                     </Col>
                                 </Row>
                                 {order.status !== 'Cancelada' &&
@@ -109,7 +122,7 @@ const OrderList = (props) => {
                                     <>
                                         <hr />
                                         {order.products.map(product => (
-                                            <Row>
+                                            <Row key={product.id}>
                                                 <Col>
                                                     <p className='text-smallest gray-text'>{product.addedOfProduct} - {product.name}</p>
                                                 </Col>
