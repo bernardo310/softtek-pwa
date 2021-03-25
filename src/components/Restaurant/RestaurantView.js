@@ -18,11 +18,7 @@ function DeleteProductModal(props) {
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
-            {/*<Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Modal heading
-          </Modal.Title>
-        </Modal.Header>*/}
+            
             <Modal.Body>
                 <h4>Eliminar producto</h4>
                 <p className='non-bold'>

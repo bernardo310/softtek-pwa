@@ -256,7 +256,7 @@ aria-describedby="desc" role="img" xmlnsXlink="http://www.w3.org/1999/xlink" cla
   <path d="M34 22V6H2v52h32V42"
   strokeWidth="2" strokeMiterlimit="10" strokeLinecap="round" stroke="var(--error)"
   fill="none" data-name="layer2" strokeLinejoin="round"></path>
-  <path d="M14 32h47M48 43l13-11-13-11" stroke-width="2" strokeMiterlimit="10"
+  <path d="M14 32h47M48 43l13-11-13-11" strokeWidth="2" strokeMiterlimit="10"
   strokeLinecap="round" stroke="var(--error)" fill="none" data-name="layer1"
   strokeLinejoin="round"></path>
 </svg>
