@@ -20,6 +20,7 @@ class OrdersView extends Component {
                     parkingSpot: null,
                     isInParkingSpot: false,
                     paymentType: 'Efectivo',
+                    seeProducts: false,
                     products: [
                         {
                             id: 0,
@@ -43,6 +44,7 @@ class OrdersView extends Component {
                     parkingSpot: 'B2',
                     isInParkingSpot: true,
                     paymentType: 'Tarjeta',
+                    seeProducts: false,
                     products: [
                         {
                             id: 0,
@@ -66,22 +68,38 @@ class OrdersView extends Component {
                     parkingSpot: 'B2',
                     isInParkingSpot: true,
                     paymentType: 'Tarjeta',
+                    seeProducts: true,
                     products: [
                         {
                             id: 0,
                             addedOfProduct: 1, 
-                            name: 'Blatt Sanwish Buffalo'
+                            name: 'Chai latte'
                         },
                         {
                             id: 1,
                             addedOfProduct: 1, 
-                            name: 'Limonada'
+                            name: 'Brownie de chocolate'
                         },
                     ]
                 },
             ],
         }
+
+        this.setSeeProduct = this.setSeeProduct.bind(this);
     }
+
+    setSeeProduct(idOrder) {
+        let orders = this.state.orders;
+
+        for(let i = 0; i < orders.length; i++) {
+            if(orders[i].id === idOrder) {
+                orders[i].seeProducts = !orders[i].seeProducts;
+            }
+        }
+
+        this.setState({orders});
+    }
+
     //const { currentUser } = useAuth()
     render() {
         return (
@@ -103,7 +121,7 @@ class OrdersView extends Component {
                     </Row>
                     <Row className='justify-content-center'>
                         <Col xs={12}>
-                            <OrderList orders={this.state.orders}/>
+                            <OrderList orders={this.state.orders} setSeeProduct={this.setSeeProduct} />
                         </Col>
                     </Row>
                 </Container>

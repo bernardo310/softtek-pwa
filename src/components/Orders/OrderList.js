@@ -32,8 +32,31 @@ const OrderList = (props) => {
     }
 
     const renderCardButtons = (order) => {
-
-    } 
+        if(order.status === 'Recibida') {
+            return(
+                <>
+                    <Col>
+                        <Button
+                            label={order.seeProducts ? 'Esconder productos' : 'Ver productos'}
+                            onClick={() => props.setSeeProduct(order.id)}
+                            block />
+                    </Col>
+                    <Col>
+                        <Button variant='primary' label='Cambiar cajón' block />
+                    </Col>
+                </>
+            );
+        } else {
+            return(
+                <Col>
+                    <Button
+                        label={order.seeProducts ? 'Esconder productos' : 'Ver productos'}
+                        onClick={() => props.setSeeProduct(order.id)}
+                        block />
+                </Col>
+            );
+        }
+    }
 
     return(
         <>
@@ -79,17 +102,23 @@ const OrderList = (props) => {
                                 }
                                 <Row>
                                     <Col>
-                                        <p className='text-smallest gray-text'><Restaurants className='icon' /> products</p>
+                                        <p className='text-smallest gray-text'><Restaurants className='icon' /> {order.products.length} productos</p>
                                     </Col>
                                 </Row>
-                                <Row>
+                                {order.seeProducts &&
+                                    <>
+                                        <hr />
+                                        {order.products.map(product => (
+                                            <Row>
+                                                <Col>
+                                                    <p className='text-smallest gray-text'>{product.addedOfProduct} - {product.name}</p>
+                                                </Col>
+                                            </Row>
+                                        ))}
+                                    </>
+                                }
+                                <Row className='mt-2'>
                                     {renderCardButtons(order)}
-                                    <Col>
-                                        <Button label='Ver productos' block />
-                                    </Col>
-                                    <Col>
-                                        <Button variant='primary' label='Cambiar cajón' block />
-                                    </Col>
                                 </Row>
                             </Card.Body>
                         </Card>
