@@ -103,7 +103,7 @@ class RestaurantView extends Component {
                                     if (menuSections.indexOf(data.category) === -1) menuSections.push(data.category);
                                 }
                             })
-                            this.setState({ restaurant, products, filteredProducts: products, menuSections, selectedSection: menuSections[0], isLoading: false, addedItems: this.context.getTotalItems() })
+                            this.setState({ restaurant, products, filteredProducts: products, menuSections, selectedSection: menuSections[0], isLoading: false, addedItems: this.context.cart.noProducts })
                         })
                     })
                 }).catch(err => {
@@ -189,7 +189,7 @@ class RestaurantView extends Component {
             }
         }
 
-        this.setState({ addedItems, products: productsInCategory, seeMore: false, addedItems: this.context.getTotalItems() });
+        this.setState({ addedItems, products: productsInCategory, seeMore: false, addedItems: this.context.cart.noProducts });
     }
 
     removeProduct(productId, category, addedOfProduct) {

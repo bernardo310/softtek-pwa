@@ -39,7 +39,7 @@ class RestaurantsView extends Component {
                             id: data.id
                         })
                     })
-                    this.setState({ restaurants, filteredRestaurants: restaurants, addedItems: this.context.getTotalItems() })
+                    this.setState({ restaurants, filteredRestaurants: restaurants, addedItems: this.context.cart.noProducts })
                 }).catch(err => {
                     console.log("Error getting sub-collection documents", err);
                 })
