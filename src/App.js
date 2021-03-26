@@ -6,6 +6,7 @@ import RestaurantsView from './components/Restaurants/RestaurantsView';
 import OrdersView from './components/Orders/OrdersView';
 import HelpView from './components/Help/HelpView';
 import { AuthProvider } from './contexts/AuthContext';
+import { CartProvider } from './contexts/CartContext';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import RestaurantView from './components/Restaurant/RestaurantView';
 import CartView from './components/Cart/CartView';
@@ -14,6 +15,7 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+      <CartProvider>
         <Switch>
           <PrivateRoute exact path='/' component={RestaurantsView} />
           <Route path='/signup' component={Signup} />
@@ -23,6 +25,7 @@ function App() {
           <PrivateRoute path='/carrito' component={CartView} />
           <Route path='/restaurant/:name' render={routerProps => <RestaurantView routerProps={routerProps} />} />
         </Switch>
+      </CartProvider>
       </AuthProvider>
     </BrowserRouter>
   );
