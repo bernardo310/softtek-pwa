@@ -7,6 +7,7 @@ import Button from '../common/Button';
 import { Link } from "react-router-dom";
 import { ArrowLeft, Phone, ShoppingBag, Clock, Money, BankCards } from '../../icons/icons';
 import { Modal, Spinner } from 'react-bootstrap';
+import { CartContext } from '../../contexts/CartContext';
 
 const { db } = require('../../firebase');
 
@@ -38,6 +39,7 @@ function DeleteProductModal(props) {
 }
 
 class RestaurantView extends Component {
+    static contextType = CartContext
     constructor(props) {
         super(props);
         this.state = {
@@ -62,8 +64,9 @@ class RestaurantView extends Component {
 
     componentDidMount() {
         if (!this.props.routerProps.history.location.state) return this.props.routerProps.history.push('/');
-
         let restaurant = this.props.routerProps.history.location.state.detail;
+        let cartProductsContext = this.context.cart.restaurantes.find(restaurantContext => restaurantContext.restaurantId === restaurant.id);
+        if (cartProductsContext) cartProductsContext = cartProductsContext.products
         const locationsRef = db.collection('locations');
         locationsRef.limit(1).get().then(snapshot => {
             snapshot.forEach(locationsDoc => {
@@ -80,15 +83,16 @@ class RestaurantView extends Component {
                                 if (data.isAvailable) {
                                     let categoryProducts = [];
                                     let category = data.category;
-
+                                    const productInCartContext = cartProductsContext ? cartProductsContext.find(productContext => productContext.id === data.id) : undefined
                                     let product = {
                                         id: data.id,
                                         name: data.name,
                                         img: data.img ? data.img : undefined,
                                         description: data.description,
                                         price: data.price,
-                                        addedOfProduct: 0,
-                                        category: data.category
+                                        addedOfProduct: productInCartContext ? productInCartContext.cantidad : 0,
+                                        category: data.category,
+                                        estimatedTime: data.estimated_time,
                                     };
 
                                     if (products.has(category)) {
@@ -103,7 +107,7 @@ class RestaurantView extends Component {
                                     if (menuSections.indexOf(data.category) === -1) menuSections.push(data.category);
                                 }
                             })
-                            this.setState({ restaurant, products, filteredProducts: products, menuSections, selectedSection: menuSections[0], isLoading: false })
+                            this.setState({ restaurant, products, filteredProducts: products, menuSections, selectedSection: menuSections[0], isLoading: false, addedItems: this.context.getTotalItems() })
                         })
                     })
                 }).catch(err => {
@@ -173,6 +177,7 @@ class RestaurantView extends Component {
     }
 
     addProduct(productId, category, addedOfProduct) {
+        console.log('addproduct restaurantview',productId, category, addedOfProduct)
         let addedItems = this.state.addedItems;
         addedItems = addedOfProduct;
 
@@ -184,10 +189,11 @@ class RestaurantView extends Component {
             if (products[i].id === productId) {
                 products[i].addedOfProduct = addedOfProduct;
                 productsInCategory.set(category, products);
+                this.context.addProduct(products[i], this.state.restaurant, addedOfProduct)
             }
         }
 
-        this.setState({ addedItems, products: productsInCategory, seeMore: false });
+        this.setState({ addedItems, products: productsInCategory, seeMore: false, addedItems: this.context.getTotalItems() });
     }
 
     removeProduct(productId, category, addedOfProduct) {
@@ -200,6 +206,8 @@ class RestaurantView extends Component {
         for (let i = 0; i < products.length; i++) {
             if (products[i].id === productId) {
                 if (addedOfProduct === -1) {
+                    console.log('errrr')
+                    this.context.decrementProduct(productId, this.state.restaurant.name, addedOfProduct, products[i].price)
                     addedItems = 0;
                     products[i].addedOfProduct = 0;
                     productsInCategory.set(category, products);
@@ -207,6 +215,7 @@ class RestaurantView extends Component {
                 } else if (products[i].addedOfProduct === 1) {
                     this.setState({ deleteProductModalShow: true, productToDelete: products[i] });
                 } else {
+                    this.context.decrementProduct(productId, this.state.restaurant.name, addedOfProduct, products[i].price)
                     addedItems = addedOfProduct;
                     products[i].addedOfProduct = addedOfProduct;
                     productsInCategory.set(category, products);
@@ -214,7 +223,7 @@ class RestaurantView extends Component {
             }
         }
 
-        this.setState({ addedItems, products: productsInCategory });
+        this.setState({ products: productsInCategory, addedItems: this.context.getTotalItems() });
     }
 
     seeMoreProduct(productToSee) {

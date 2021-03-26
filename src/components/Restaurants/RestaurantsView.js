@@ -5,16 +5,19 @@ import Searchbar from '../common/Searchbar';
 import Menu from '../common/Menu';
 import { ShoppingBag } from '../../icons/icons';
 import { Link } from 'react-router-dom';
+import { CartContext } from '../../contexts/CartContext';
 const { db } = require('../../firebase');
 //import { useAuth } from '../contexts/AuthContext'
 
 class RestaurantsView extends Component {
+    static contextType = CartContext
     constructor(props) {
         super(props);
         this.state = {
             restaurants: [],
             filteredRestaurants: [],
-            searchInput: ''
+            searchInput: '',
+            addedItems: 0
         }
     }
     componentDidMount() {
@@ -36,7 +39,7 @@ class RestaurantsView extends Component {
                             id: data.id
                         })
                     })
-                    this.setState({ restaurants, filteredRestaurants: restaurants })
+                    this.setState({ restaurants, filteredRestaurants: restaurants, addedItems: this.context.getTotalItems() })
                 }).catch(err => {
                     console.log("Error getting sub-collection documents", err);
                 })
@@ -67,6 +70,9 @@ class RestaurantsView extends Component {
                         <Col xs='auto' className='vertical-center'>
                             <Link to='/carrito' className='shopping-link'>
                                 <ShoppingBag className='header-icon mb-0' />
+                                {this.state.addedItems > 0 &&
+                                    <div className='added-items'><p className='text-smallest'>{this.state.addedItems}</p></div>
+                                }
                             </Link>
                         </Col>
                     </Row>
