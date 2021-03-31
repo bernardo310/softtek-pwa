@@ -142,7 +142,7 @@ export function CartProvider({ children }) {
                 setLoading(false)
             })
         })
-    }, [])
+    }, [currentUser])
 
     const value = {
         cart,
