@@ -58,7 +58,7 @@ const CartView = (props) => {
         setCartId(cart.id);
         setEstimatedTime(cart.waitingTime);
         cart.restaurantes.forEach(restaurant => {
-            console.log(restaurant)
+            console.log('aa',restaurant)
             const productsArray = [];
             restaurant.products.forEach(product => {
                 console.log(product)

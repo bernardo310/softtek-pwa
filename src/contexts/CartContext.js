@@ -81,7 +81,9 @@ export function CartProvider({ children }) {
         console.log('totalProducs',cart.noProducts)
         cart.noProducts++;
         cart.total = cart.total + Number(unitaryPrice);
-        const filteredProduct = cart.restaurantes.find(restaurant => restaurant.restaurantName === restaurantName).products.find(product => product.id === productId);
+        const filteredRestaurant = cart.restaurantes.find(restaurant => restaurant.restaurantName === restaurantName);
+        filteredRestaurant.total = Number(addedOfProduct) * Number(unitaryPrice)
+        const filteredProduct = filteredRestaurant.products.find(product => product.id === productId);
         filteredProduct.cantidad = addedOfProduct;
         filteredProduct.costoTotal = Number(filteredProduct.costoTotal) + Number(unitaryPrice);
         await db.collection('carts').doc(cart.cartId).update(cart);
@@ -107,7 +109,9 @@ export function CartProvider({ children }) {
 
         } else {
             //reduce quantity of product in cart
-            const filteredProduct = cart.restaurantes.find(restaurant => restaurant.restaurantName === restaurantName).products.find(product => product.id === productId);
+            const filteredRestaurant = cart.restaurantes.find(restaurant => restaurant.restaurantName === restaurantName);
+            filteredRestaurant.total = Number(addedOfProduct) * Number(unitaryPrice)    
+            const filteredProduct = filteredRestaurant.products.find(product => product.id === productId);
             filteredProduct.cantidad = addedOfProduct;
             filteredProduct.costoTotal -= Number(unitaryPrice);
         }

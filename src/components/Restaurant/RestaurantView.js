@@ -174,8 +174,6 @@ class RestaurantView extends Component {
 
     addProduct(productId, category, addedOfProduct) {
         console.log('addproduct restaurantview',productId, category, addedOfProduct)
-        let addedItems = this.state.addedItems;
-        addedItems = addedOfProduct;
 
         let productsInCategory = this.state.products;
 
@@ -189,11 +187,10 @@ class RestaurantView extends Component {
             }
         }
 
-        this.setState({ addedItems, products: productsInCategory, seeMore: false, addedItems: this.context.cart.noProducts });
+        this.setState({  products: productsInCategory, seeMore: false, addedItems: this.context.getTotalItems() });
     }
 
     removeProduct(productId, category, addedOfProduct) {
-        let addedItems = this.state.addedItems;
 
         let productsInCategory = this.state.products;
 
@@ -204,7 +201,6 @@ class RestaurantView extends Component {
                 if (addedOfProduct === -1) {
                     console.log('errrr')
                     this.context.decrementProduct(productId, this.state.restaurant.name, addedOfProduct, products[i].price)
-                    addedItems = 0;
                     products[i].addedOfProduct = 0;
                     productsInCategory.set(category, products);
                     this.setState({ deleteProductModalShow: false });
@@ -212,7 +208,6 @@ class RestaurantView extends Component {
                     this.setState({ deleteProductModalShow: true, productToDelete: products[i] });
                 } else {
                     this.context.decrementProduct(productId, this.state.restaurant.name, addedOfProduct, products[i].price)
-                    addedItems = addedOfProduct;
                     products[i].addedOfProduct = addedOfProduct;
                     productsInCategory.set(category, products);
                 }
