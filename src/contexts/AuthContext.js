@@ -23,7 +23,7 @@ export function AuthProvider({ children }) {
                 phoneNumber: null
             }
             const userExists = await db.collection('users').doc(userData.id).get().exists;
-            if (!userExists) {
+            if (!userExists.exists) {
                 //create new user
                 await db.collection('users').doc(userData.id).set(Object.assign({}, userData));
                 //create empty cart for user
@@ -55,8 +55,8 @@ export function AuthProvider({ children }) {
                 name: user.user.displayName,
                 phoneNumber: user.user.phoneNumber ? user.user.phoneNumber : null
             }
-            const userExists = await db.collection('users').doc(userData.id).get().exists;
-            if (!userExists) {
+            const userExists = await db.collection('users').doc(userData.id).get();
+            if (!userExists.exists) {
                 //create new user
                 await db.collection('users').doc(userData.id).set(Object.assign({}, userData));
                 //create empty cart for user
