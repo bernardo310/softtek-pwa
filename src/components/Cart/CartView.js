@@ -58,10 +58,14 @@ const CartView = (props) => {
         setCartId(cart.id);
         setEstimatedTime(cart.waitingTime);
         cart.restaurantes.forEach(restaurant => {
-            console.log('aa',restaurant)
+            //console.log('aa',restaurant)
             const productsArray = [];
+
+            restaurant.total = 0;
+            let restaurantTotal = restaurant.total;
+            
             restaurant.products.forEach(product => {
-                console.log(product)
+                //console.log(product)
                 productsArray.push({
                     id: product.id,
                     name: product.nombre,
@@ -69,13 +73,14 @@ const CartView = (props) => {
                     total: product.costoTotal,
                     unitaryPrice: product.costoUnitario,
                 })
+                restaurantTotal += product.costoTotal;
             })
 
             products.set(restaurant.restaurantName, {
-                total: restaurant.total,
+                total: restaurantTotal,
                 products: productsArray
             });
-            console.log(products)
+            //console.log(products)
         })
         setProducts(new Map(products))
         setProductsLength(products.size);
