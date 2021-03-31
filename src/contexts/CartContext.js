@@ -129,6 +129,11 @@ export function CartProvider({ children }) {
     }
 
     useEffect(() => {
+        if(!currentUser) {
+            setCart({})
+            setLoading(false)
+            return
+        }
         db.collection('carts').where('userId', '==', currentUser.uid).get().then(snapshot => {
             snapshot.forEach(cart => {
                 const cartData = cart.data();
