@@ -47,6 +47,7 @@ export function CartProvider({ children }) {
                 tiempoEntrega: input_product.estimatedTime,
                 tiempoEntregaUnitario: input_product.estimatedTime
             })
+            filteredRestaurant.total += Number(input_product.price)
             cart.noProducts += addedOfProduct;
             cart.total = cart.total + addedOfProduct * Number(input_product.price);    
         } else {
@@ -82,7 +83,8 @@ export function CartProvider({ children }) {
         cart.noProducts++;
         cart.total = cart.total + Number(unitaryPrice);
         const filteredRestaurant = cart.restaurantes.find(restaurant => restaurant.restaurantName === restaurantName);
-        filteredRestaurant.total = Number(addedOfProduct) * Number(unitaryPrice)
+        //filteredRestaurant.total = Number(addedOfProduct) * Number(unitaryPrice)
+        filteredRestaurant.total += Number(unitaryPrice)
         const filteredProduct = filteredRestaurant.products.find(product => product.id === productId);
         filteredProduct.cantidad = addedOfProduct;
         filteredProduct.costoTotal = Number(filteredProduct.costoTotal) + Number(unitaryPrice);
@@ -110,7 +112,8 @@ export function CartProvider({ children }) {
         } else {
             //reduce quantity of product in cart
             const filteredRestaurant = cart.restaurantes.find(restaurant => restaurant.restaurantName === restaurantName);
-            filteredRestaurant.total = Number(addedOfProduct) * Number(unitaryPrice)    
+            //filteredRestaurant.total = Number(addedOfProduct) * Number(unitaryPrice)    
+            filteredRestaurant.total -= Number(unitaryPrice)    
             const filteredProduct = filteredRestaurant.products.find(product => product.id === productId);
             filteredProduct.cantidad = addedOfProduct;
             filteredProduct.costoTotal -= Number(unitaryPrice);
