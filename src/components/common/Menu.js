@@ -1,11 +1,35 @@
-import React from 'react';
-import { Navbar, Nav, Container } from "react-bootstrap";
+import React, { useState } from 'react';
+import { Navbar, Nav, Container, Modal } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import { Restaurants, Orders, Question, Logout } from '../../icons/icons';
 import { useAuth } from '../../contexts/AuthContext'
+import Button from './Button';
+
+const LogoutConfirmationModal = (props) => {
+    return(
+        <Modal
+            {...props}
+            size="md"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Body>
+                <h4>Cerrar sesión</h4>
+                <p className='non-bold'>
+                    ¿Seguro que deseas cerrar sesión?
+                </p>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={props.onHide} label='Cancelar' />
+                <Button variant='primary' onClick={props.logout} label='Cerrar sesión' />
+            </Modal.Footer>
+        </Modal>
+    );
+}
 
 const Menu = (props) => {
     const { logout } = useAuth();
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     return(
         <Navbar>
@@ -44,13 +68,18 @@ const Menu = (props) => {
                     <Nav.Item className='ml-auto'>
                         <Nav.Link
                             eventKey="sesion"
-                            onClick={logout}
+                            onClick={() => setShowLogoutModal(true)}
                         >
                             <Logout className='icon ml-2' /> Salir
                         </Nav.Link>
                     </Nav.Item>
                 </Nav>
             </Container>
+            <LogoutConfirmationModal
+                show={showLogoutModal}
+                onHide={() => setShowLogoutModal(false)}
+                logout={logout}
+            />
         </Navbar>
     );
 }
