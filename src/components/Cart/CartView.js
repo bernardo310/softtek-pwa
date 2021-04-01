@@ -48,7 +48,7 @@ const CartView = (props) => {
     const [estimatedTime, setEstimatedTime] = useState(15);
     const [cartId, setCartId] = useState();
     const [isLoading, setIsLoading] = useState(true);
-    const { cart, getCart, incrementProduct, decrementProduct } = useCart();
+    const { cart, getCart, incrementProduct, decrementProduct, createOrder } = useCart();
 
 
     useEffect(async () => {
@@ -63,7 +63,7 @@ const CartView = (props) => {
 
             restaurant.total = 0;
             let restaurantTotal = restaurant.total;
-            
+
             restaurant.products.forEach(product => {
                 //console.log(product)
                 productsArray.push({
@@ -191,7 +191,7 @@ return (
                                 </Row>
                                 <>
                                     {value.products.map((product) => (
-                                        <Row className='my-2'>
+                                        <Row className='my-2' key={product.name}>
                                             <Col>
                                                 <Row>
                                                     <Col xs={12}>
@@ -269,7 +269,13 @@ return (
                         </Row>
                         <Row className='mt-4'>
                             <Col xs={12}>
-                                <Button variant='primary' label={`Confirmar orden ($${cart.total.toFixed(2)})`} disabled={disableButtonOrder()} block />
+                                <Button
+                                    variant='primary'
+                                    label={`Confirmar orden ($${cart.total.toFixed(2)})`}
+                                    disabled={disableButtonOrder()}
+                                    onClick={() => createOrder(location, parkingSpot, phone, name)}
+                                    block
+                                />
                             </Col>
                         </Row>
                     </>

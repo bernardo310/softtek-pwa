@@ -135,6 +135,31 @@ export function CartProvider({ children }) {
         return cartData
     }
 
+    function createOrder(location, parkingSpot, phone, name) {
+        cart.restaurantes.forEach(async restaurant => {
+            const { id } = await db.collection('orders').add({
+                cashAmount: null,
+                creationDate: new Date(),
+                customerPhone: phone.current.value,
+                id: null,
+                name: name.current.value,
+                onWay: location === 'En camino' ? true : false,
+                parkingPlace: location === 'En camino' ? location : parkingSpot.current.value,
+                paymentType: restaurant.paymentType[0],
+                products: restaurant.products,
+                restaurantId: restaurant.restaurantId,
+                statusId: null,
+                storeName: restaurant.restaurantName,
+                total: restaurant.total,
+                userId: cart.userId,
+            });
+
+            await db.collection('orders').doc(id).update({
+                id: id,
+            })
+        });
+    }
+
     useEffect(() => {
         if(!currentUser) {
             setCart({})
@@ -157,7 +182,8 @@ export function CartProvider({ children }) {
         addProduct,
         incrementProduct,
         decrementProduct,
-        getTotalItems
+        getTotalItems,
+        createOrder,
     }
 
     return (
