@@ -81,7 +81,7 @@ export function CartProvider({ children }) {
             //add new product from new restaurant to cart
             console.log('new product, NEW restaurant', cart)
             cart.restaurantes.push({
-                paymentType: ["Tarjeta"],   //TODO get payment types
+                paymentType: input_restaurant.paymentTypes,
                 products: [{
                     cantidad: addedOfProduct,
                     comentario: "",
