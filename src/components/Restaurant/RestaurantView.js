@@ -183,7 +183,7 @@ class RestaurantView extends Component {
             if (products[i].id === productId) {
                 products[i].addedOfProduct = addedOfProduct;
                 productsInCategory.set(category, products);
-                this.context.addProduct(products[i], this.state.restaurant, addedOfProduct)
+                this.context.addProduct(products[i], this.state.restaurant, addedOfProduct, products[i].estimatedTime)
             }
         }
 
@@ -199,7 +199,6 @@ class RestaurantView extends Component {
         for (let i = 0; i < products.length; i++) {
             if (products[i].id === productId) {
                 if (addedOfProduct === -1) {
-                    console.log('errrr')
                     this.context.decrementProduct(productId, this.state.restaurant.name, addedOfProduct, products[i].price)
                     products[i].addedOfProduct = 0;
                     productsInCategory.set(category, products);
@@ -207,7 +206,7 @@ class RestaurantView extends Component {
                 } else if (products[i].addedOfProduct === 1) {
                     this.setState({ deleteProductModalShow: true, productToDelete: products[i] });
                 } else {
-                    this.context.decrementProduct(productId, this.state.restaurant.name, addedOfProduct, products[i].price)
+                    this.context.decrementProduct(productId, this.state.restaurant.name, addedOfProduct, products[i].price, products[i].estimatedTime)
                     products[i].addedOfProduct = addedOfProduct;
                     productsInCategory.set(category, products);
                 }

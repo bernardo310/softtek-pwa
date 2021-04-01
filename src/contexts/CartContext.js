@@ -22,16 +22,41 @@ export function CartProvider({ children }) {
         return numItems
     }
 
+    function getRestaurantTotal(cartRestaurant) {
+        //calculate restaurant total cost
+        let restaurantTotal = 0;
+        cartRestaurant.products.forEach(product => {
+            restaurantTotal += product.cantidad * product.costoUnitario
+        })
+        return restaurantTotal
+    }
+
+    function getCartTotalWaitingTime(cartWaitingTime) {
+        //calculate cart's total waiting time
+        let totalWaitingTime = 0;
+        cartWaitingTime.restaurantes.forEach(restaurant => {
+            totalWaitingTime += restaurant.waitingTime;
+        })
+        return totalWaitingTime
+    }
+
+    function getRestaurantAverageWaitingTime(restaurant) {
+        //calculate restaurant's average waiting time
+        const sumTiemposEntrega = restaurant.products.reduce((a, b) => a + b.tiempoEntrega, 0);
+        const avgTiempoEntrega = (sumTiemposEntrega / restaurant.products.length) || 0;
+        return avgTiempoEntrega
+    }
+
     async function addProduct(input_product, input_restaurant, addedOfProduct) {
-        console.log('adding product',cart, input_product, input_restaurant, addedOfProduct)
-        console.log(        cart.total + (addedOfProduct * input_product.price))
-        console.log(        cart.total, '+', addedOfProduct, '*' ,input_product.price)
+        console.log('adding product', cart, input_product, input_restaurant, addedOfProduct)
+        console.log(cart.total + (addedOfProduct * input_product.price))
+        console.log(cart.total, '+', addedOfProduct, '*', input_product.price)
         //check if product is already in cart
         const filteredRestaurant = cart.restaurantes.find(restaurant => restaurant.restaurantId === input_restaurant.id)
         const filteredProduct = filteredRestaurant ? filteredRestaurant.products.find(product => product.id === input_product.id) : undefined;
         if (filteredProduct != undefined) {
             //already has product in cart
-            incrementProduct(input_product.id, input_restaurant.name, addedOfProduct, filteredProduct.costoUnitario)
+            incrementProduct(input_product.id, input_restaurant.name, addedOfProduct, filteredProduct.costoUnitario, filteredProduct.tiempoEntregaUnitario)
             console.log('already has')
         } else if (filteredRestaurant) {
             //add new product from existing restaurant to cart
@@ -48,13 +73,15 @@ export function CartProvider({ children }) {
                 tiempoEntregaUnitario: input_product.estimatedTime
             })
             filteredRestaurant.total += Number(input_product.price)
+            filteredRestaurant.waitingTime = getRestaurantAverageWaitingTime(filteredRestaurant)
+
             cart.noProducts += addedOfProduct;
-            cart.total = cart.total + addedOfProduct * Number(input_product.price);    
+            cart.total = cart.total + addedOfProduct * Number(input_product.price);
         } else {
             //add new product from new restaurant to cart
             console.log('new product, NEW restaurant', cart)
             cart.restaurantes.push({
-                paymentType: ["Tarjeta"],
+                paymentType: ["Tarjeta"],   //TODO get payment types
                 products: [{
                     cantidad: addedOfProduct,
                     comentario: "",
@@ -72,53 +99,62 @@ export function CartProvider({ children }) {
                 waitingTime: input_product.estimatedTime,
             })
             cart.noProducts += addedOfProduct;
-            cart.total = cart.total + (addedOfProduct * input_product.price);    
+            cart.total = cart.total + (addedOfProduct * input_product.price);
         }
+        cart.waitingTime = getCartTotalWaitingTime(cart);
         await db.collection('carts').doc(cart.cartId).update(cart);
     }
 
-    async function incrementProduct(productId, restaurantName, addedOfProduct, unitaryPrice) {
-        console.log('increment',productId, restaurantName, addedOfProduct, unitaryPrice)
-        console.log('totalProducs',cart.noProducts)
-        cart.noProducts++;
-        cart.total = cart.total + Number(unitaryPrice);
+    async function incrementProduct(productId, restaurantName, addedOfProduct, unitaryPrice, tiempoEntregaUnitario) {
+        console.log('increment', productId, restaurantName, addedOfProduct, unitaryPrice, tiempoEntregaUnitario)
+        console.log('totalProducs', cart.noProducts)
         const filteredRestaurant = cart.restaurantes.find(restaurant => restaurant.restaurantName === restaurantName);
-        //filteredRestaurant.total = Number(addedOfProduct) * Number(unitaryPrice)
-        filteredRestaurant.total += Number(unitaryPrice)
         const filteredProduct = filteredRestaurant.products.find(product => product.id === productId);
         filteredProduct.cantidad = addedOfProduct;
-        filteredProduct.costoTotal = Number(filteredProduct.costoTotal) + Number(unitaryPrice);
+        filteredProduct.costoTotal += Number(unitaryPrice);
+        filteredProduct.tiempoEntrega += Number(tiempoEntregaUnitario);
+
+        filteredRestaurant.total = getRestaurantTotal(filteredRestaurant)
+        filteredRestaurant.waitingTime = getRestaurantAverageWaitingTime(filteredRestaurant)
+
+        cart.noProducts++;
+        cart.total = cart.total + Number(unitaryPrice);
+        cart.waitingTime = getCartTotalWaitingTime(cart);
         await db.collection('carts').doc(cart.cartId).update(cart);
     }
 
-    async function decrementProduct(productId, restaurantName, addedOfProduct, unitaryPrice) {
-        console.log('decrementing',productId, restaurantName, addedOfProduct, unitaryPrice)
+    async function decrementProduct(productId, restaurantName, addedOfProduct, unitaryPrice, tiempoEntregaUnitario) {
+        console.log('decrementing', productId, restaurantName, addedOfProduct, unitaryPrice, tiempoEntregaUnitario)
 
-        cart.noProducts--;
-        cart.total -= unitaryPrice;
-        if(addedOfProduct <= 0) {
+        const filteredRestaurant = cart.restaurantes.find(restaurant => restaurant.restaurantName === restaurantName);
+        if (addedOfProduct <= 0) {
             //remove from cart
-            const cartProductsFromRestaurant = cart.restaurantes.find(restaurant => restaurant.restaurantName === restaurantName).products
-            if(cartProductsFromRestaurant.length === 1) {
+            const cartProductsFromRestaurant = filteredRestaurant.products
+            if (cartProductsFromRestaurant.length === 1) {
                 //only product from restaurant, delete restaurant from cart
                 cart.restaurantes = cart.restaurantes.filter(restaurant => restaurant.restaurantName != restaurantName)
-                console.log('removing restaurant from cart',restaurantName,cart)
+                console.log('removing restaurant from cart', restaurantName, cart)
             } else {
                 //other products in cart from restaurant, delete product from restaurant in cart
-                console.log('removing product from restaurant', productId,cartProductsFromRestaurant)
+                console.log('removing product from restaurant', productId, cartProductsFromRestaurant)
                 cart.restaurantes.find(restaurant => restaurant.restaurantName === restaurantName).products = cartProductsFromRestaurant.filter(product => product.id !== productId)
             }
-
+            filteredRestaurant.total = getRestaurantTotal(filteredRestaurant)
         } else {
             //reduce quantity of product in cart
-            const filteredRestaurant = cart.restaurantes.find(restaurant => restaurant.restaurantName === restaurantName);
-            //filteredRestaurant.total = Number(addedOfProduct) * Number(unitaryPrice)    
-            filteredRestaurant.total -= Number(unitaryPrice)    
             const filteredProduct = filteredRestaurant.products.find(product => product.id === productId);
             filteredProduct.cantidad = addedOfProduct;
             filteredProduct.costoTotal -= Number(unitaryPrice);
+            filteredProduct.tiempoEntrega -= Number(tiempoEntregaUnitario);
+
+            filteredRestaurant.total = getRestaurantTotal(filteredRestaurant)
+            filteredRestaurant.waitingTime = getRestaurantAverageWaitingTime(filteredRestaurant)
+
         }
-        console.log('final cart',cart)
+        console.log('final cart', cart)
+        cart.noProducts--;
+        cart.total -= unitaryPrice;
+        cart.waitingTime = getCartTotalWaitingTime(cart);
         await db.collection('carts').doc(cart.cartId).update(cart);
     }
 
@@ -136,7 +172,7 @@ export function CartProvider({ children }) {
     }
 
     useEffect(() => {
-        if(!currentUser) {
+        if (!currentUser) {
             setCart({})
             setLoading(false)
             return

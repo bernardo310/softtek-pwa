@@ -45,7 +45,6 @@ const CartView = (props) => {
     const [deleteProductModalShow, setDeleteProductModal] = useState(false);
     const [restaurantToDelete, setRestaurantToDelete] = useState(null);
     const [productToDelete, setProductToDelete] = useState({});
-    const [estimatedTime, setEstimatedTime] = useState(15);
     const [cartId, setCartId] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const { cart, getCart, incrementProduct, decrementProduct } = useCart();
@@ -56,9 +55,7 @@ const CartView = (props) => {
         setIsLoading(true);
         //const cart = await getCart()
         setCartId(cart.id);
-        setEstimatedTime(cart.waitingTime);
         cart.restaurantes.forEach(restaurant => {
-            //console.log('aa',restaurant)
             const productsArray = [];
 
             restaurant.total = 0;
@@ -72,6 +69,7 @@ const CartView = (props) => {
                     addedOfProduct: product.cantidad,
                     total: product.costoTotal,
                     unitaryPrice: product.costoUnitario,
+                    tiempoEntregaUnitario: product.tiempoEntregaUnitario
                 })
                 restaurantTotal += product.costoTotal;
             })
@@ -110,7 +108,7 @@ const addProduct = async (productId, restaurantName, addedOfProduct) => {
         if (productsInRestaurant.products[i].id === productId) {
             productsInRestaurant.products[i].addedOfProduct = addedOfProduct;
             productsInRestaurant.products[i].total = productsInRestaurant.products[i].unitaryPrice * addedOfProduct;
-            incrementProduct(productId, restaurantName, addedOfProduct, productsInRestaurant.products[i].unitaryPrice)
+            incrementProduct(productId, restaurantName, addedOfProduct, productsInRestaurant.products[i].unitaryPrice, productsInRestaurant.products[i].tiempoEntregaUnitario)
         }
         productsInRestaurant.total += Number(productsInRestaurant.products[i].total);
     }
@@ -127,7 +125,7 @@ const removeProduct = async (productId, restaurantName, addedOfProduct) => {
         if (productsInRestaurant.products[i].id === productId) {
             if (addedOfProduct === -1) {
                 //productsInRestaurant.products[i].addedOfProduct = 0;
-                decrementProduct(productId, restaurantName, addedOfProduct, productsInRestaurant.products[i].unitaryPrice)
+                decrementProduct(productId, restaurantName, addedOfProduct, productsInRestaurant.products[i].unitaryPrice, productsInRestaurant.products[i].tiempoEntregaUnitario)
                 productsInRestaurant.products.splice(i, 1);
                 setDeleteProductModal(false);
             } else if (productsInRestaurant.products[i].addedOfProduct === 1) {
@@ -137,11 +135,12 @@ const removeProduct = async (productId, restaurantName, addedOfProduct) => {
             } else {
                 productsInRestaurant.products[i].addedOfProduct = addedOfProduct;
                 productsInRestaurant.products[i].total = productsInRestaurant.products[i].unitaryPrice * addedOfProduct;
-                decrementProduct(productId, restaurantName, addedOfProduct, productsInRestaurant.products[i].unitaryPrice)
+                decrementProduct(productId, restaurantName, addedOfProduct, productsInRestaurant.products[i].unitaryPrice, productsInRestaurant.products[i].tiempoEntregaUnitario)
             }
         }
 
         if (productsInRestaurant.products.length > 0) {
+            console.log(i, productsInRestaurant)
             productsInRestaurant.total += Number(productsInRestaurant.products[i].total);
         }
     }
@@ -264,7 +263,7 @@ return (
                         </Row>
                         <Row className='mt-2'>
                             <Col xs={12}>
-                                <p className='text-smaller text-center'><Clock className='icon' /> Tiempo de entrega estimado: {estimatedTime} min.</p>
+                                <p className='text-smaller text-center'><Clock className='icon' /> Tiempo de entrega estimado: {cart.waitingTime} min.</p>
                             </Col>
                         </Row>
                         <Row className='mt-4'>
