@@ -1,11 +1,14 @@
-import React, { Component,  useRef, useState } from 'react';
-import { Container, Row, Col, Modal } from 'react-bootstrap';
+import React, { Component, useRef, useState } from 'react';
+import { Container, Row, Col, Modal, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { ShoppingBag } from '../../icons/icons';
 import OrderList from './OrderList';
 import Menu from '../common/Menu';
 import Button from '../common/Button';
 import Input from '../common/Input';
+import { AuthContext } from '../../contexts/AuthContext';
+import Moment from 'moment';
+const { db } = require('../../firebase');
 
 const ChangeParkingSpotModal = (props) => {
     const [parkingSpot, setParkingSpot] = useState('');
@@ -35,109 +38,15 @@ const ChangeParkingSpotModal = (props) => {
 }
 
 class OrdersView extends Component {
+    static contextType = AuthContext
     constructor(props) {
         super(props);
         this.state = {
-            orders: [
-                {   
-                    id: 0,
-                    restaurantName: 'Restaurante 1',
-                    status: 'Recibida',
-                    date: '10/01/2020',
-                    total: 320.00,
-                    estimatedDeliveryTime: 15,
-                    parkingSpot: null,
-                    isInParkingSpot: false,
-                    paymentType: 'Efectivo',
-                    seeProducts: false,
-                    products: [
-                        {
-                            id: 0,
-                            addedOfProduct: 1, 
-                            name: 'Boneless grandes'
-                        },
-                        {
-                            id: 1,
-                            addedOfProduct: 1, 
-                            name: 'Boneless medianas'
-                        },
-                    ]
-                },
-                {   
-                    id: 1,
-                    restaurantName: 'Restaurante 2',
-                    status: 'Recibida',
-                    date: '10/01/2020',
-                    total: 320.00,
-                    estimatedDeliveryTime: 15,
-                    parkingSpot: null,
-                    isInParkingSpot: false,
-                    paymentType: 'Efectivo',
-                    seeProducts: false,
-                    products: [
-                        {
-                            id: 0,
-                            addedOfProduct: 1, 
-                            name: 'Boneless grandes'
-                        },
-                        {
-                            id: 1,
-                            addedOfProduct: 1, 
-                            name: 'Boneless medianas'
-                        },
-                    ]
-                },
-                {   
-                    id: 2,
-                    restaurantName: 'Blatt Salat Haus',
-                    status: 'Entregada',
-                    date: '15/12/2019',
-                    total: 280.20,
-                    estimatedDeliveryTime: 15,
-                    parkingSpot: 'B2',
-                    isInParkingSpot: true,
-                    paymentType: 'Tarjeta',
-                    seeProducts: false,
-                    products: [
-                        {
-                            id: 0,
-                            addedOfProduct: 1, 
-                            name: 'Blatt Sanwish Buffalo'
-                        },
-                        {
-                            id: 1,
-                            addedOfProduct: 1, 
-                            name: 'Limonada'
-                        },
-                    ]
-                },
-                {   
-                    id: 3,
-                    restaurantName: 'Starbucks',
-                    status: 'Cancelada',
-                    date: '15/12/2019',
-                    total: 280.20,
-                    estimatedDeliveryTime: 15,
-                    parkingSpot: 'B2',
-                    isInParkingSpot: true,
-                    paymentType: 'Tarjeta',
-                    seeProducts: true,
-                    products: [
-                        {
-                            id: 0,
-                            addedOfProduct: 1, 
-                            name: 'Chai latte'
-                        },
-                        {
-                            id: 1,
-                            addedOfProduct: 1, 
-                            name: 'Brownie de chocolate'
-                        },
-                    ]
-                },
-            ],
+            orders: [],
             changeParkingSpotModalShow: false,
             order: null,
+            addedItems: 0,
+            isLoading: true
         }
 
         this.setSeeProduct = this.setSeeProduct.bind(this);
@@ -145,49 +54,108 @@ class OrdersView extends Component {
         this.changeParkingSpot = this.changeParkingSpot.bind(this);
     }
 
+    componentDidMount() {
+        if (!this.context.currentUser) return;
+        const enumStatus = {    //TODO change to correct values
+            "1": "Recibida",
+            "2": "Entregada",
+            "3": "Cancelada",
+            "4": "Cancelada",
+            "5": "Cancelada"
+        };
+        let ordersData = [];
+        //get user's orders
+        db.collection('orders').where('userId', '==', this.context.currentUser.uid).get().then(snapshot => {
+            snapshot.forEach(orderFb => {
+                const order = orderFb.data();
+                console.log(order.products)
+                ordersData.push({
+                    id: order.id,
+                    restaurantName: order.storeName,
+                    status: enumStatus[order.statusId],
+                    date: Moment(order.creationDate.toDate()).format('DD/MM/YYYY'),
+                    total: order.total,
+                    estimatedDeliveryTime: order.waitingTime,
+                    parkingSpot: order.parkingPlace,
+                    isInParkingSpot: true,
+                    paymentType: order.paymentType,
+                    seeProducts: false,
+                    products: order.products.map(product => {
+                        return {
+                            id: product.id,
+                            addedOfProduct: product.cantidad,
+                            name: product.nombre
+                        }
+                    })
+                });
+            })
+            //get number of items in cart for icon
+            let cartData;
+            db.collection('carts').where('userId', '==', this.context.currentUser.uid).get().then(snapshot => {
+                snapshot.forEach(cart => {
+                    cartData = cart.data();
+                    cartData.cartId = cart.id
+                })
+                this.setState({ orders: ordersData, addedItems: cartData.noProducts, isLoading: false });
+            })
+    
+        })
+
+    }
+
     setSeeProduct(idOrder) {
         let orders = this.state.orders;
 
-        for(let i = 0; i < orders.length; i++) {
-            if(orders[i].id === idOrder) {
+        for (let i = 0; i < orders.length; i++) {
+            if (orders[i].id === idOrder) {
                 orders[i].seeProducts = !orders[i].seeProducts;
             }
         }
 
-        this.setState({orders});
+        this.setState({ orders });
     }
 
     showParkingSpotModal(order) {
-        this.setState({changeParkingSpotModalShow: true, order});
+        this.setState({ changeParkingSpotModalShow: true, order });
     }
 
-    changeParkingSpot(parkingSpot, order, allOrders) {
+    async changeParkingSpot(parkingSpot, order, allOrders) {
         let orders = this.state.orders;
 
-        if(allOrders) {
-            for(let i = 0; i < orders.length; i++) {
-                if(orders[i].status === 'Recibida' && orders[i].date === order.date) {
+        if (allOrders) {
+            for (let i = 0; i < orders.length; i++) {
+                if (orders[i].status === 'Recibida' && orders[i].date === order.date) {
                     orders[i].isInParkingSpot = true;
                     orders[i].parkingSpot = parkingSpot;
                 }
             }
+            const snapshot = await db.collection('orders').where('userId', '==', this.context.currentUser.uid).get();
+            snapshot.forEach(async orderFb => {
+                const orderData = orderFb.data();
+                if (orderData.statusId == 1) {
+                    await db.collection('orders').doc(orderData.id).update({
+                        "parkingPlace": parkingSpot
+                    });
+                }
+            })
         } else {
-            for(let i = 0; i < orders.length; i++) {
-                if(orders[i].id === order.id) {
+            for (let i = 0; i < orders.length; i++) {
+                if (orders[i].id === order.id) {
                     orders[i].isInParkingSpot = true;
                     orders[i].parkingSpot = parkingSpot;
                 }
             }
+            await db.collection('orders').doc(order.id).update({
+                "parkingPlace": parkingSpot
+            });
         }
-
-        this.setState({orders, changeParkingSpotModalShow: false});
+        this.setState({ orders, changeParkingSpotModalShow: false });
     }
 
-    //const { currentUser } = useAuth()
     render() {
         return (
             <>
-                <Menu {...this.props}/>
+                <Menu {...this.props} />
                 <Container className='mb-5 mt-3'>
                     <Row className='justify-content-between'>
                         <Col xs='auto' className='vertical-center'>
@@ -204,17 +172,25 @@ class OrdersView extends Component {
                     </Row>
                     <Row className='justify-content-center'>
                         <Col xs={12}>
-                            <OrderList 
-                                orders={this.state.orders}
-                                setSeeProduct={this.setSeeProduct}
-                                showParkingSpotModal={this.showParkingSpotModal}
-                            />
+                            {this.state.isLoading ?
+                                <div className='text-center my-auto'>
+                                    <Spinner animation="border" role="status">
+                                        <span className="sr-only">Loading...</span>
+                                    </Spinner>
+                                </div>
+                                :
+                                <OrderList
+                                    orders={this.state.orders}
+                                    setSeeProduct={this.setSeeProduct}
+                                    showParkingSpotModal={this.showParkingSpotModal}
+                                />
+                            }
                         </Col>
                     </Row>
                 </Container>
                 <ChangeParkingSpotModal
                     show={this.state.changeParkingSpotModalShow}
-                    onHide={() => this.setState({changeParkingSpotModalShow: false})}
+                    onHide={() => this.setState({ changeParkingSpotModalShow: false })}
                     order={this.state.order}
                     changeParkingSpot={this.changeParkingSpot}
                 />

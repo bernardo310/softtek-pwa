@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.6.3",
     "bootstrap": "^4.6.0",
     "firebase": "^8.2.6",
+    "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
     "react-div-100vh": "^0.5.6",

@@ -4,13 +4,16 @@ import HelpList from './HelpList';
 import Menu from '../common/Menu';
 import { Link } from 'react-router-dom';
 import { ShoppingBag } from '../../icons/icons';
+import { CartContext } from '../../contexts/CartContext';
 const { db } = require('../../firebase');
 
 class HelpView extends Component {
+    static contextType = CartContext
     constructor(props) {
         super(props);
         this.state = {
-            faq: []
+            faq: [],
+            addedItems: 0
         }
     }
 
@@ -24,10 +27,10 @@ class HelpView extends Component {
                     answer: data.answer
                 })
             })
-            this.setState({ faq })
+            this.setState({ faq, addedItems: this.context.cart.noProducts })
         });
     }
-    //const { currentUser } = useAuth()
+
     render() {
         return (
             <>

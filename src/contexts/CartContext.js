@@ -171,8 +171,10 @@ export function CartProvider({ children }) {
         return cartData
     }
 
-    function createOrder(location, parkingSpot, phone, name) {
-        cart.restaurantes.forEach(async restaurant => {
+    async function createOrder(location, parkingSpot, phone, name, payment) {
+        const finalCart = await getCart();
+        finalCart.restaurantes.forEach(async restaurant => {
+            console.log(restaurant)
             const { id } = await db.collection('orders').add({
                 cashAmount: null,
                 creationDate: new Date(),
@@ -181,19 +183,21 @@ export function CartProvider({ children }) {
                 name: name.current.value,
                 onWay: location === 'En camino' ? true : false,
                 parkingPlace: location === 'En camino' ? location : parkingSpot.current.value,
-                paymentType: restaurant.paymentType[0],
+                paymentType: payment,
                 products: restaurant.products,
                 restaurantId: restaurant.restaurantId,
-                statusId: null,
+                statusId: 1,
                 storeName: restaurant.restaurantName,
                 total: restaurant.total,
                 userId: cart.userId,
+                waitingTime: restaurant.waitingTime
             });
 
             await db.collection('orders').doc(id).update({
                 id: id,
             })
         });
+        //TODO empty user's cart
     }
 
     useEffect(() => {
