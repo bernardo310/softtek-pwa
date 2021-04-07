@@ -152,6 +152,12 @@ const removeProduct = async (productId, restaurantName, addedOfProduct) => {
         setProducts(tempProducts);
     }
 }
+
+const clickCreateOrder = async () => {
+    await createOrder(location, parkingSpot, phone, name, payment);
+    history.push('/ordenes');
+}
+
 return (
     <>
         <Container className='mb-5 mt-3'>
@@ -273,7 +279,7 @@ return (
                                     variant='primary'
                                     label={`Confirmar orden ($${cart.total.toFixed(2)})`}
                                     disabled={disableButtonOrder()}
-                                    onClick={() => createOrder(location, parkingSpot, phone, name, payment)}
+                                    onClick={clickCreateOrder}
                                     block
                                 />
                             </Col>

@@ -197,7 +197,12 @@ export function CartProvider({ children }) {
                 id: id,
             })
         });
-        //TODO empty user's cart
+        //reset user's cart to empty
+        finalCart.noProducts = 0;
+        finalCart.restaurantes = [];
+        finalCart.total = 0;
+        finalCart.waitingTime = 0;
+        await db.collection('carts').doc(finalCart.cartId).update(finalCart);
     }
 
     useEffect(() => {
