@@ -13,13 +13,14 @@ export function CartProvider({ children }) {
     const [loading, setLoading] = useState(true)
     const { currentUser } = useAuth();
 
-    function getTotalItems() {
+    async function getTotalItems() {
         //gets number total items in cart
         let numItems = 0;
-        cart.restaurantes.forEach(restaurant => {
-            restaurant.products.forEach(product => numItems++)
-        })
-        return numItems
+        const updatedCart = await getCart();
+        // updatedCart.restaurantes.forEach(restaurant => {
+        //     restaurant.products.forEach(product => numItems++)
+        // })
+        return updatedCart.noProducts
     }
 
     function getRestaurantTotal(cartRestaurant) {

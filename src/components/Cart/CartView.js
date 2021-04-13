@@ -47,12 +47,14 @@ const CartView = (props) => {
     const [productToDelete, setProductToDelete] = useState({});
     const [cartId, setCartId] = useState();
     const [isLoading, setIsLoading] = useState(true);
-    const { cart, getCart, incrementProduct, decrementProduct, createOrder } = useCart();
+    const { getCart, incrementProduct, decrementProduct, createOrder } = useCart();
+    const [cart, setCart] = useState();
 
 
     useEffect(async () => {
         setIsLoading(true);
-        //const cart = await getCart()
+        const cart = await getCart()
+        setCart(cart)
         setCartId(cart.id);
         cart.restaurantes.forEach(restaurant => {
             const productsArray = [];
@@ -78,11 +80,8 @@ const CartView = (props) => {
             });
         })
         setProducts(new Map(products))
-        setProductsLength(products.size);
+        setProductsLength(cart.noProducts);
         setIsLoading(false);
-
-
-
     }, []);
 
     let disableButtonOrder = () => {
@@ -147,6 +146,8 @@ const CartView = (props) => {
             tempProducts.delete(restaurantName);
             setProducts(tempProducts);
         }
+        setProductsLength(cart.noProducts);
+
     }
 
     const clickCreateOrder = async () => {

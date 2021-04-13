@@ -182,7 +182,7 @@ class RestaurantView extends Component {
             }
         }
 
-        this.setState({  products: productsInCategory, seeMore: false, addedItems: this.context.getTotalItems() });
+        this.setState({  products: productsInCategory, seeMore: false, addedItems: this.context.cart.noProducts });
     }
 
     removeProduct(productId, category, addedOfProduct) {
