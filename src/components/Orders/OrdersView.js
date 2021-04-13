@@ -56,7 +56,7 @@ class OrdersView extends Component {
 
     componentDidMount() {
         if (!this.context.currentUser) return;
-        const enumStatus = {  
+        const enumStatus = {
             "1": "Recibida",
             "2": "En Proceso",
             "3": "Por Entregar",
@@ -73,6 +73,7 @@ class OrdersView extends Component {
                     restaurantName: order.storeName,
                     status: enumStatus[order.statusId],
                     date: Moment(order.creationDate.toDate()).format('DD/MM/YYYY'),
+                    fullDate: order.creationDate.toDate(),
                     total: order.total,
                     estimatedDeliveryTime: order.waitingTime,
                     parkingSpot: order.parkingPlace,
@@ -88,6 +89,8 @@ class OrdersView extends Component {
                     })
                 });
             })
+            ordersData = ordersData.sort((a, b) => Date.parse(b.fullDate) - Date.parse(a.fullDate))
+
             //get number of items in cart for icon
             let cartData;
             db.collection('carts').where('userId', '==', this.context.currentUser.uid).get().then(snapshot => {
@@ -97,7 +100,7 @@ class OrdersView extends Component {
                 })
                 this.setState({ orders: ordersData, addedItems: cartData.noProducts, isLoading: false });
             })
-    
+
         })
 
     }
