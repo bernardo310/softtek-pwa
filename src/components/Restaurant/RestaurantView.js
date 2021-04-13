@@ -140,9 +140,6 @@ class RestaurantView extends Component {
         let searchInput = e.target.value;
         let stateProducts = [...this.state.products];
         stateProducts = Array.from(stateProducts, ([category, product]) => (product));
-
-        //console.log(stateProducts);
-
         let products = []
         for (let i = 0; i < stateProducts.length; i++) {
             for (let j = 0; j < stateProducts[i].length; j++) {
@@ -173,8 +170,6 @@ class RestaurantView extends Component {
     }
 
     addProduct(productId, category, addedOfProduct) {
-        console.log('addproduct restaurantview',productId, category, addedOfProduct)
-
         let productsInCategory = this.state.products;
 
         let products = productsInCategory.get(category);

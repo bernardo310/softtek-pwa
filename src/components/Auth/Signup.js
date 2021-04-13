@@ -17,7 +17,6 @@ export default function Signup() {
     const history = useHistory();
 
     async function handleSubmit(e) {
-        //console.log('signup',emailRef.current.value, passwordRef.current.value)
         e.preventDefault()
         if (passwordRef.current.value !== confirmpasswordRef.current.value) return setError('Las contraseñas deben ser iguales')
         try {

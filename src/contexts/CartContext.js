@@ -48,19 +48,14 @@ export function CartProvider({ children }) {
     }
 
     async function addProduct(input_product, input_restaurant, addedOfProduct) {
-        console.log('adding product', cart, input_product, input_restaurant, addedOfProduct)
-        console.log(cart.total + (addedOfProduct * input_product.price))
-        console.log(cart.total, '+', addedOfProduct, '*', input_product.price)
         //check if product is already in cart
         const filteredRestaurant = cart.restaurantes.find(restaurant => restaurant.restaurantId === input_restaurant.id)
         const filteredProduct = filteredRestaurant ? filteredRestaurant.products.find(product => product.id === input_product.id) : undefined;
         if (filteredProduct != undefined) {
             //already has product in cart
             incrementProduct(input_product.id, input_restaurant.name, addedOfProduct, filteredProduct.costoUnitario, filteredProduct.tiempoEntregaUnitario)
-            console.log('already has')
         } else if (filteredRestaurant) {
             //add new product from existing restaurant to cart
-            console.log('new product, same restaurant')
             filteredRestaurant.products.push({
                 cantidad: addedOfProduct,
                 comentario: "",
@@ -79,7 +74,6 @@ export function CartProvider({ children }) {
             cart.total = cart.total + addedOfProduct * Number(input_product.price);
         } else {
             //add new product from new restaurant to cart
-            console.log('new product, NEW restaurant', cart)
             cart.restaurantes.push({
                 paymentType: input_restaurant.paymentTypes,
                 products: [{
@@ -106,8 +100,6 @@ export function CartProvider({ children }) {
     }
 
     async function incrementProduct(productId, restaurantName, addedOfProduct, unitaryPrice, tiempoEntregaUnitario) {
-        console.log('increment', productId, restaurantName, addedOfProduct, unitaryPrice, tiempoEntregaUnitario)
-        console.log('totalProducs', cart.noProducts)
         const filteredRestaurant = cart.restaurantes.find(restaurant => restaurant.restaurantName === restaurantName);
         const filteredProduct = filteredRestaurant.products.find(product => product.id === productId);
         filteredProduct.cantidad = addedOfProduct;
@@ -124,8 +116,6 @@ export function CartProvider({ children }) {
     }
 
     async function decrementProduct(productId, restaurantName, addedOfProduct, unitaryPrice, tiempoEntregaUnitario) {
-        console.log('decrementing', productId, restaurantName, addedOfProduct, unitaryPrice, tiempoEntregaUnitario)
-
         const filteredRestaurant = cart.restaurantes.find(restaurant => restaurant.restaurantName === restaurantName);
         if (addedOfProduct <= 0) {
             //remove from cart
@@ -133,10 +123,8 @@ export function CartProvider({ children }) {
             if (cartProductsFromRestaurant.length === 1) {
                 //only product from restaurant, delete restaurant from cart
                 cart.restaurantes = cart.restaurantes.filter(restaurant => restaurant.restaurantName != restaurantName)
-                console.log('removing restaurant from cart', restaurantName, cart)
             } else {
                 //other products in cart from restaurant, delete product from restaurant in cart
-                console.log('removing product from restaurant', productId, cartProductsFromRestaurant)
                 cart.restaurantes.find(restaurant => restaurant.restaurantName === restaurantName).products = cartProductsFromRestaurant.filter(product => product.id !== productId)
             }
             filteredRestaurant.total = getRestaurantTotal(filteredRestaurant)
@@ -151,7 +139,6 @@ export function CartProvider({ children }) {
             filteredRestaurant.waitingTime = getRestaurantAverageWaitingTime(filteredRestaurant)
 
         }
-        console.log('final cart', cart)
         cart.noProducts--;
         cart.total -= unitaryPrice;
         cart.waitingTime = getCartTotalWaitingTime(cart);
@@ -174,7 +161,6 @@ export function CartProvider({ children }) {
     async function createOrder(location, parkingSpot, phone, name, payment) {
         const finalCart = await getCart();
         finalCart.restaurantes.forEach(async restaurant => {
-            console.log(restaurant)
             const { id } = await db.collection('orders').add({
                 cashAmount: null,
                 creationDate: new Date(),

@@ -15,7 +15,6 @@ export default function Login() {
     const history = useHistory();
 
     async function handleSubmit(e) {
-        //console.log('login')
         e.preventDefault()
         try {
             setError('');

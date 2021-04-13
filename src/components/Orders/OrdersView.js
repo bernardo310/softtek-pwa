@@ -68,7 +68,6 @@ class OrdersView extends Component {
         db.collection('orders').where('userId', '==', this.context.currentUser.uid).get().then(snapshot => {
             snapshot.forEach(orderFb => {
                 const order = orderFb.data();
-                console.log(order.products)
                 ordersData.push({
                     id: order.id,
                     restaurantName: order.storeName,
