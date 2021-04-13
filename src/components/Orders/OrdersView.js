@@ -56,11 +56,11 @@ class OrdersView extends Component {
 
     componentDidMount() {
         if (!this.context.currentUser) return;
-        const enumStatus = {    //TODO change to correct values
+        const enumStatus = {  
             "1": "Recibida",
-            "2": "Entregada",
-            "3": "Cancelada",
-            "4": "Cancelada",
+            "2": "En Proceso",
+            "3": "Por Entregar",
+            "4": "Entregada",
             "5": "Cancelada"
         };
         let ordersData = [];

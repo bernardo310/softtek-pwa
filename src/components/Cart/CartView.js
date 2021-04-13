@@ -266,7 +266,7 @@ const CartView = (props) => {
                             </Row>
                             <Row className='mt-2'>
                                 <Col xs={12}>
-                                    <p className='text-smaller text-center'><Clock className='icon' /> Tiempo de entrega estimado: {cart.waitingTime} min.</p>
+                                    <p className='text-smaller text-center'><Clock className='icon' /> Tiempo de entrega estimado: {cart.waitingTime > 40 ? 40 : cart.waitingTime} min.</p>
                                 </Col>
                             </Row>
                             <Row className='mt-4'>

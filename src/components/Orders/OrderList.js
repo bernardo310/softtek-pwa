@@ -90,7 +90,7 @@ const OrderList = (props) => {
                                     <>
                                         <Row>
                                             <Col>
-                                                <p className='text-smallest gray-text'><Clock className='icon' /> {order.status === 'Entregada' ? 'Entregada'  : `Entrega estimada: ${order.estimatedDeliveryTime} min.`}</p>
+                                                <p className='text-smallest gray-text'><Clock className='icon' /> {order.status === 'Entregada' ? 'Entregada'  : `Entrega estimada: ${order.estimatedDeliveryTime > 40 ? 40 : order.estimatedDeliveryTime} min.`}</p>
                                             </Col>
                                         </Row>
                                         <Row>
