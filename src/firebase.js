@@ -20,39 +20,4 @@ firebase.firestore().enablePersistence();
 export const auth = app.auth();
 export const db = app.firestore();
 
-/*export const allowNotifications = async () => {
-    try {
-        const messaging = firebase.messaging();
-        //await messaging.requestPermission();
-        const token = await messaging.getToken();
-        console.log('user token:', token);
-        
-        return token;
-    } catch (error) {
-        console.error('smn aquí si entró ahora si');
-        console.error(error);
-    }
-}*/
-
-
-export const allowNotifications = async () => {
-    try {
-        const msg = firebase.messaging();
-
-        await Notification.requestPermission().then(async permission => {
-            if (permission === "denied") {
-                console.log("Permission wasn't granted. Allow a retry.");
-                return;
-            } else if (permission === "default") {
-                console.log("The permission request was dismissed.");
-                return;
-            }
-            const token = await msg.getToken();
-            console.log("user token: ", token);
-
-            return token;
-        });
-    } catch (e) {
-        console.error(e);
-    }
-}
+export const messaging = app.messaging();

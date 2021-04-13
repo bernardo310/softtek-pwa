@@ -10,12 +10,14 @@ import { CartProvider } from './contexts/CartContext';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import RestaurantView from './components/Restaurant/RestaurantView';
 import CartView from './components/Cart/CartView';
-import { allowNotifications } from './firebase';
+import { messaging } from "./firebase";
 
 function App() {
-    useEffect(() => {
-      allowNotifications();
-    }, []);
+  useEffect(async () => {
+    const token = await messaging.getToken();
+    console.log(token);
+    navigator.serviceWorker.addEventListener("message", (message) => console.log(message));
+  }, []);
 
   return (
     <BrowserRouter>
