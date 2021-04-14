@@ -89,7 +89,7 @@ class OrdersView extends Component {
                     })
                 });
             })
-            ordersData = ordersData.sort((a, b) => Date.parse(a.fullDate) - Date.parse(b.fullDate))
+            ordersData = ordersData.sort((a, b) => Date.parse(b.fullDate) - Date.parse(a.fullDate))
 
             //get number of items in cart for icon
             let cartData;
