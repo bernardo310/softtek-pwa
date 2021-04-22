@@ -6,23 +6,22 @@ import { ArrowLeft } from '../../icons/icons';
 import { useCart } from '../../contexts/CartContext';
 
 const SeeMore = ({show, product, onClose, addProductFront}) => {
-    let [addedOfProduct, setAddedOfProduct] = useState(0);
-    let [instructions, setInstructions] = useState('');
+    const [addedOfProduct, setAddedOfProduct] = useState(0);
+    const [instructions, setInstructions] = useState('');
     const { cart } = useCart();
 
     useEffect(() => {
         for(let rest of cart.restaurantes) {
             for(let prod of rest.products) {
-                console.log(prod.id === product.id, prod.id,product.id)
                 if(prod.id === product.id) {
                     setInstructions(prod.comentario)
                     return
                 } 
             }
         }
-        setInstructions('')
-    }, [product])
-    //TODO instructions dont clear after adding new product. clicking on another displays previous instructions
+        setInstructions('');
+    }, [product]);
+
     useEffect(() => {
         setAddedOfProduct(product.addedOfProduct);
     }, [product.addedOfProduct]);

@@ -100,9 +100,7 @@ class OrdersView extends Component {
                 })
                 this.setState({ orders: ordersData, addedItems: cartData.noProducts, isLoading: false });
             })
-
         })
-
     }
 
     setSeeProduct(idOrder) {
