@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCart } from '../../contexts/CartContext';
 import { Container, Row, Col, Modal, Spinner } from 'react-bootstrap';
@@ -35,9 +35,10 @@ const DeleteProductModal = (props) => {
 const CartView = (props) => {
     const height = use100vh();
     const history = useHistory();
-    const parkingSpot = useRef();
-    const name = useRef();
-    const phone = useRef();
+    const [cashAmount, setCashAmount] = useState(null);
+    const [parkingSpot, setParkingSpot] = useState(null);
+    const [name, setName] = useState(null);
+    const [phone, setPhone] = useState(null);
     const [location, setLocation] = useState(null);
     const [payment, setPayment] = useState(null);
     const [productsLength, setProductsLength] = useState(0);
@@ -49,6 +50,7 @@ const CartView = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const { getCart, incrementProduct, decrementProduct, createOrder } = useCart();
     const [cart, setCart] = useState();
+    const [disabledButtonOrder, setDisabledButtonOrder] = useState(true);
 
 
     useEffect(async () => {
@@ -84,16 +86,13 @@ const CartView = (props) => {
         setIsLoading(false);
     }, []);
 
-    let disableButtonOrder = () => {
-        if (!location || !payment || !name.current.value.length > 0 || !phone.current.value.length > 0)
-            return true;
-        else if ((location === 'En cajón' && !parkingSpot.current) || !payment || !name.current.value.length > 0 || !phone.current.value.length > 0) {
-            return true;
-        } else if ((location === 'En cajón' && parkingSpot.current.value.length > 0) && payment && name.current.value.length > 0 && phone.current.value.length > 0)
-            return false;
-        else
-            return false;
-    }
+    useEffect(() => {        
+        if(!location || !payment || !name || !phone || (location === 'En cajón'  && !parkingSpot) || (payment === 'Efectivo' && !cashAmount)) {
+            setDisabledButtonOrder(true);
+        } else {
+            setDisabledButtonOrder(false);
+        }
+    }, [name, phone, location, parkingSpot, payment, cashAmount]);
 
     const addProduct = async (productId, restaurantName, addedOfProduct) => {
         let tempProducts = new Map(products);
@@ -134,8 +133,11 @@ const CartView = (props) => {
                     decrementProduct(productId, restaurantName, addedOfProduct, productsInRestaurant.products[i].unitaryPrice, productsInRestaurant.products[i].tiempoEntregaUnitario)
                 }
             }
+        }
 
-            if (productsInRestaurant.products.length > 0) { //TODO fix, truena cuando quitas producto en pantalla carrito teniendo difertes productos del mismo restaurant
+
+        for(let i = 0; i < productsInRestaurant.products.length; i++) {
+            if (productsInRestaurant.products.length > 0) {
                 productsInRestaurant.total += Number(productsInRestaurant.products[i].total);
             }
         }
@@ -151,7 +153,10 @@ const CartView = (props) => {
     }
 
     const clickCreateOrder = async () => {
-        await createOrder(location, parkingSpot, phone, name, payment);
+        if(payment === 'Tarjeta')
+            cashAmount = cart.total.toFixed(2);
+
+        await createOrder(location, parkingSpot, phone, name, payment, cashAmount);
         history.push('/ordenes');
     }
 
@@ -227,8 +232,8 @@ const CartView = (props) => {
                             <Row className='mt-2'>
                                 <Col xs={12}>
                                     <h6 className='text-smaller main-text bold'>Datos de contacto</h6>
-                                    <Input label='Nombre' className='my-3' ref={name} />
-                                    <Input label='Teléfono' size='sm' ref={phone} />
+                                    <Input label='Nombre' className='my-3' handleValue={(val) => setName(val)} />
+                                    <Input label='Teléfono' size='sm' type='tel' pattern='[0-9]{10}' handleValue={(val) => setPhone(val)} />
                                 </Col>
                             </Row>
                             <Row className='mt-2'>
@@ -241,11 +246,11 @@ const CartView = (props) => {
                                     </label>
                                     <label className='radio-wrapper'>
                                         Estoy en un cajón de estacionamiento
-                                <input type='radio' checked={location === 'En cajón'} name='cajon' value='En cajón' onChange={() => setLocation('En cajón')} />
+                                    <input type='radio' checked={location === 'En cajón'} name='cajon' value='En cajón' onChange={() => setLocation('En cajón')} />
                                         <span className='checkmark'></span>
                                     </label>
                                     {location === 'En cajón' &&
-                                        <Input label='Cajón' size='xs' className='mt-4 mb-3' ref={parkingSpot} />
+                                        <Input label='Cajón' size='xs' className='mt-4 mb-3' handleValue={(val) => setParkingSpot(val)} />
                                     }
                                 </Col>
                             </Row>
@@ -254,12 +259,18 @@ const CartView = (props) => {
                                     <h6 className='text-smaller main-text bold'>Tipo de pago</h6>
                                     <label className='radio-wrapper'>
                                         Efectivo
-                                <input type='radio' checked={payment === 'Efectivo'} name='efectivo' value='Efectivo' onChange={() => setPayment('Efectivo')} />
+                                        <input type='radio' checked={payment === 'Efectivo'} name='efectivo' value='Efectivo' onChange={() => setPayment('Efectivo')} />
                                         <span className='checkmark'></span>
                                     </label>
+                                    {payment === 'Efectivo' && 
+                                        <>
+                                            <Input label='Cantidad' type='number' size='xs' className='mt-4 mb-1' handleValue={(val) => setCashAmount(val)} />
+                                            <p className='text-smallest error mb-4'>*Por favor indica la cantidad de efectivo con la que vas a pagar, para que se tenga el cambio exacto.</p>
+                                        </>
+                                    }
                                     <label className='radio-wrapper'>
                                         Tarjeta
-                                <input type='radio' checked={payment === 'Tarjeta'} name='tarjeta' value='Tarjeta' onChange={() => setPayment('Tarjeta')} />
+                                        <input type='radio' checked={payment === 'Tarjeta'} name='tarjeta' value='Tarjeta' onChange={() => setPayment('Tarjeta')} />
                                         <span className='checkmark'></span>
                                     </label>
                                 </Col>
@@ -274,7 +285,7 @@ const CartView = (props) => {
                                     <Button
                                         variant='primary'
                                         label={`Confirmar orden ($${cart.total.toFixed(2)})`}
-                                        disabled={disableButtonOrder()}
+                                        disabled={disabledButtonOrder}
                                         onClick={clickCreateOrder}
                                         block
                                     />
