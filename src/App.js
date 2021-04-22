@@ -13,11 +13,11 @@ import CartView from './components/Cart/CartView';
 import { messaging } from "./firebase";
 
 function App() {
-  useEffect(async () => {
+  /*useEffect(async () => {
     const token = await messaging.getToken();
     console.log(token);
     navigator.serviceWorker.addEventListener("message", (message) => console.log(message));
-  }, []);
+  }, []);*/
 
   return (
     <BrowserRouter>
