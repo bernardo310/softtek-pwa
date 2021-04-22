@@ -29,6 +29,15 @@ export function CartProvider({ children }) {
         return restaurantTotal
     }
 
+    function getRestaurantNoProducts(cartRestaurant) {
+        //calculate restaurant total number of products
+        let restaurantNoProducts = 0;
+        cartRestaurant.products.forEach(product => {
+            restaurantNoProducts += product.cantidad
+        })
+        return restaurantNoProducts
+    }
+
     function getCartTotalWaitingTime(cartWaitingTime) {
         //calculate cart's total waiting time
         let totalWaitingTime = 0;
@@ -67,6 +76,7 @@ export function CartProvider({ children }) {
             })
             filteredRestaurant.total += Number(input_product.price)
             filteredRestaurant.waitingTime = getRestaurantAverageWaitingTime(filteredRestaurant)
+            filteredRestaurant.noProducts = getRestaurantNoProducts(filteredRestaurant)
 
             cart.noProducts += addedOfProduct;
             cart.total = cart.total + addedOfProduct * Number(input_product.price);
@@ -89,6 +99,7 @@ export function CartProvider({ children }) {
                 restaurantName: input_restaurant.name,
                 total: addedOfProduct * input_product.price,
                 waitingTime: input_product.estimatedTime * addedOfProduct,
+                noProducts: addedOfProduct
             })
             cart.noProducts += addedOfProduct;
             cart.total = cart.total + (addedOfProduct * input_product.price);
@@ -108,7 +119,8 @@ export function CartProvider({ children }) {
             filteredProduct.tiempoEntrega = Number(tiempoEntregaUnitario * addedOfProduct);
             filteredRestaurant.total = getRestaurantTotal(filteredRestaurant)
             filteredRestaurant.waitingTime = getRestaurantAverageWaitingTime(filteredRestaurant)
-    
+            filteredRestaurant.noProducts = getRestaurantNoProducts(filteredRestaurant)
+  
             cart.noProducts+= qtyDifference;
             cart.total = cart.total + Number(unitaryPrice * qtyDifference);
             cart.waitingTime = getCartTotalWaitingTime(cart);
@@ -139,6 +151,7 @@ export function CartProvider({ children }) {
 
             filteredRestaurant.total = getRestaurantTotal(filteredRestaurant)
             filteredRestaurant.waitingTime = getRestaurantAverageWaitingTime(filteredRestaurant)
+            filteredRestaurant.noProducts = getRestaurantNoProducts(filteredRestaurant)
 
         }
         cart.noProducts--;

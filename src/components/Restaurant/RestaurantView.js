@@ -170,7 +170,6 @@ class RestaurantView extends Component {
     }
 
     addProductFront(productId, category, addedOfProduct, instructions) {
-        console.log('instructions:',instructions)
         let productsInCategory = this.state.products;
 
         let products = productsInCategory.get(category);

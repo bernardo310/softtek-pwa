@@ -3,11 +3,26 @@ import Input from '../common/Input';
 import Button from '../common/Button';
 import { Container, Row, Col } from 'react-bootstrap';
 import { ArrowLeft } from '../../icons/icons';
+import { useCart } from '../../contexts/CartContext';
 
 const SeeMore = ({show, product, onClose, addProductFront}) => {
     let [addedOfProduct, setAddedOfProduct] = useState(0);
-    const instructionsRef = useRef();
+    let [instructions, setInstructions] = useState('');
+    const { cart } = useCart();
 
+    useEffect(() => {
+        for(let rest of cart.restaurantes) {
+            for(let prod of rest.products) {
+                console.log(prod.id === product.id, prod.id,product.id)
+                if(prod.id === product.id) {
+                    setInstructions(prod.comentario)
+                    return
+                } 
+            }
+        }
+        setInstructions('')
+    }, [product])
+    //TODO instructions dont clear after adding new product. clicking on another displays previous instructions
     useEffect(() => {
         setAddedOfProduct(product.addedOfProduct);
     }, [product.addedOfProduct]);
@@ -46,7 +61,7 @@ const SeeMore = ({show, product, onClose, addProductFront}) => {
                 </Row>
                 <Row className='mb-4'>
                     <Col xs={12}>
-                        <Input type='text' label='Instrucciones de preparación' ref={instructionsRef} />
+                        <Input type='text' label='Instrucciones de preparación' handleValue={(val) => setInstructions(val)} value={instructions}/>
                         <p className='text-smallest error'>
                             *Agregar instrucciones de preparación podría generar algún costo
                             extra en el producto, recomendamos contactar al comercio para confirmar
@@ -66,7 +81,7 @@ const SeeMore = ({show, product, onClose, addProductFront}) => {
                         <Button
                             label={`¡Agregar! ($${product.price * addedOfProduct})`}
                             variant='primary'
-                            onClick={() => addProductFront(product.id, product.category, addedOfProduct, instructionsRef.current.value)} 
+                            onClick={() => addProductFront(product.id, product.category, addedOfProduct, instructions)} 
                             disabled={addedOfProduct === 0} 
                         />
                     </Col>
