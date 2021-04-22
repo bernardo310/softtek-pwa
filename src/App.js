@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PrivateRoute from './components/PrivateRoute';
 import Signup from './components/Auth/Signup';
 import Login from './components/Auth/Login';
@@ -10,8 +10,15 @@ import { CartProvider } from './contexts/CartContext';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import RestaurantView from './components/Restaurant/RestaurantView';
 import CartView from './components/Cart/CartView';
+import { messaging } from "./firebase";
 
 function App() {
+  useEffect(async () => {
+    const token = await messaging.getToken();
+    console.log(token);
+    navigator.serviceWorker.addEventListener("message", (message) => console.log(message));
+  }, []);
+
   return (
     <BrowserRouter>
       <AuthProvider>
@@ -30,5 +37,7 @@ function App() {
     </BrowserRouter>
   );
 }
+
+//initializeFirebase();
 
 export default App;
