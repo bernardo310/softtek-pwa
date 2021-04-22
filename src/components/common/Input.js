@@ -16,12 +16,14 @@ class Input extends Component {
         if(this.props.handleValue)
             this.props.handleValue(value);
     }
-
+    //TODO instructions dont clear after adding new product. clicking on another displays previous instructions
     render(){
+        let value = this.state.value;
+        if(this.props.value && this.props.value.length > 0) value = this.props.value
         return(
             <div className={`input-wrapper ${this.props.className ? this.props.className : 'mt-2 mb-3'} ${this.props.size ? this.props.size : 'block'} `}>
-                <input type={this.props.type} pattern={this.props.pattern} className='input' value={this.state.value} onChange={this.handleValue} ref={this.props.innerRef}/>
-                <div className={`input-placeholder non-bold ${this.state.value.length > 0 && 'focused'}`}>
+                <input type={this.props.type} className='input' value={value} onChange={this.handleValue} ref={this.props.innerRef}/>
+                <div className={`input-placeholder non-bold ${value.length > 0 && 'focused'}`}>
                     {this.props.label}
                 </div>
             </div>

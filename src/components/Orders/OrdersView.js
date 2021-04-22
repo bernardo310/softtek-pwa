@@ -25,7 +25,7 @@ const ChangeParkingSpotModal = (props) => {
                 <Input label='Cajón' size='sm' className='mt-4 mb-3' handleValue={(value) => setParkingSpot(value)} />
                 <label className='checkbox-wrapper'>
                     Aplicar para todas las órdenes en progreso
-                    <input type='checkbox' checked={allOrders} name='camino' value='En camino' onChange={() => setAllOrders(!allOrders)} />
+                    <input type='checkbox' checked={allOrders} name='camino' value='En Camino' onChange={() => setAllOrders(!allOrders)} />
                     <span className='checkmark'></span>
                 </label>
             </Modal.Body>

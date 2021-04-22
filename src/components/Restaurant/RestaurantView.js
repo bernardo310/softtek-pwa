@@ -52,7 +52,7 @@ class RestaurantView extends Component {
             isLoading: true
         }
 
-        this.addProduct = this.addProduct.bind(this);
+        this.addProductFront = this.addProductFront.bind(this);
         this.removeProduct = this.removeProduct.bind(this);
         this.selectSection = this.selectSection.bind(this);
         this.seeMoreProduct = this.seeMoreProduct.bind(this);
@@ -169,7 +169,7 @@ class RestaurantView extends Component {
         this.setState({ searchInput, filteredProducts });
     }
 
-    addProduct(productId, category, addedOfProduct) {
+    addProductFront(productId, category, addedOfProduct, instructions) {
         let productsInCategory = this.state.products;
 
         let products = productsInCategory.get(category);
@@ -178,7 +178,7 @@ class RestaurantView extends Component {
             if (products[i].id === productId) {
                 products[i].addedOfProduct = addedOfProduct;
                 productsInCategory.set(category, products);
-                this.context.addProduct(products[i], this.state.restaurant, addedOfProduct, products[i].estimatedTime)
+                this.context.addProduct(products[i], this.state.restaurant, addedOfProduct, instructions)
             }
         }
 
@@ -305,7 +305,7 @@ class RestaurantView extends Component {
                                 <Col xs={12}>
                                     <ProductList
                                         products={this.state.filteredProducts}
-                                        addProduct={this.addProduct}
+                                        addProduct={this.addProductFront}
                                         removeProduct={this.removeProduct}
                                         selectSection={this.selectSection}
                                         refArray={this.state.refArray}
@@ -318,7 +318,7 @@ class RestaurantView extends Component {
                     <SeeMore
                         show={this.state.seeMore}
                         product={this.state.productToSee}
-                        addProduct={this.addProduct}
+                        addProductFront={this.addProductFront}
                         onClose={() => this.setState({ seeMore: false })}
                     />
                 </Container>

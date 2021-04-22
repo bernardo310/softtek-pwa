@@ -135,6 +135,7 @@ const CartView = (props) => {
             }
         }
 
+
         for(let i = 0; i < productsInRestaurant.products.length; i++) {
             if (productsInRestaurant.products.length > 0) {
                 productsInRestaurant.total += Number(productsInRestaurant.products[i].total);
@@ -239,8 +240,8 @@ const CartView = (props) => {
                                 <Col xs={12}>
                                     <h6 className='text-smaller main-text bold'>Ubicación</h6>
                                     <label className='radio-wrapper'>
-                                        Voy en camino
-                                    <input type='radio' checked={location === 'En camino'} name='camino' value='En camino' onChange={() => setLocation('En camino')} />
+                                        Voy En Camino
+                                <input type='radio' checked={location === 'En Camino'} name='camino' value='En Camino' onChange={() => setLocation('En Camino')} />
                                         <span className='checkmark'></span>
                                     </label>
                                     <label className='radio-wrapper'>
@@ -256,7 +257,6 @@ const CartView = (props) => {
                             <Row className='mt-2'>
                                 <Col xs={12}>
                                     <h6 className='text-smaller main-text bold'>Tipo de pago</h6>
-                                    {/* TODO check if restaurants in cart accept tarjeta, if not only show efectivo */}
                                     <label className='radio-wrapper'>
                                         Efectivo
                                         <input type='radio' checked={payment === 'Efectivo'} name='efectivo' value='Efectivo' onChange={() => setPayment('Efectivo')} />
