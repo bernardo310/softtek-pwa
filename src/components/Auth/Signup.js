@@ -19,13 +19,13 @@ export default function Signup() {
     async function handleSubmit(e) {
         e.preventDefault()
         if (passwordRef.current.value !== confirmpasswordRef.current.value) return setError('Las contraseñas deben ser iguales')
+        if (passwordRef.current.value.length < 6) return setError('Las contraseña debe tener al menos 6 caracteres')
         try {
             setError('');
             setLoading(true);
             await signup(emailRef.current.value, passwordRef.current.value)
             history.push('/')
         } catch(err) {
-            console.log(err)
             setError('Ya existe una cuenta con este correo')
         }
         setLoading(false);

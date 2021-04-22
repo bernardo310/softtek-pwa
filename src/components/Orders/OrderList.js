@@ -95,7 +95,7 @@ const OrderList = (props) => {
                                         </Row>
                                         <Row>
                                             <Col>
-                                                <p className='text-smallest gray-text'><Car className='icon' /> {order.isInParkingSpot ? `Cajón ${order.parkingSpot}`  : `En camino`}</p>
+                                                <p className='text-smallest gray-text'><Car className='icon' /> {order.isInParkingSpot ? `Cajón ${order.parkingSpot}`  : `En Camino`}</p>
                                             </Col>
                                         </Row>
                                         <Row>

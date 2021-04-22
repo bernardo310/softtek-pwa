@@ -24,7 +24,7 @@ export function AuthProvider({ children }) {
                 phoneNumber: null,
                 token, //
             }
-            const userExists = await db.collection('users').doc(userData.id).get().exists;
+            const userExists = await db.collection('users').doc(userData.id).get();
             if (!userExists.exists) {
                 //create new user
                 await db.collection('users').doc(userData.id).set(Object.assign({}, userData));
