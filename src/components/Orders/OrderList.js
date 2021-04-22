@@ -8,16 +8,28 @@ const OrderList = (props) => {
     const renderStatusBlock = (order) => {
         let status = order.status;
         switch (status) {
-            case 'Entregada':
-                return(
-                    <div className='delivered-pill'>
-                        <p className='text-smallest m-0'>Entregada</p>
-                    </div>
-                );
             case 'Recibida':
                 return(
                     <div className='received-pill'>
                         <p className='text-smallest m-0'>Recibida</p>
+                    </div>
+                );
+            case 'En Proceso':
+                return(
+                    <div className='in-process-pill'>
+                        <p className='text-smallest m-0'>En Proceso</p>
+                    </div>
+                );
+            case 'Por Entregar':
+                return(
+                    <div className='to-be-delivered-pill'>
+                        <p className='text-smallest m-0'>Por entregar</p>
+                    </div>
+                );
+            case 'Entregada':
+                return(
+                    <div className='delivered-pill'>
+                        <p className='text-smallest m-0'>Entregada</p>
                     </div>
                 );
             case 'Cancelada':
@@ -32,7 +44,7 @@ const OrderList = (props) => {
     }
 
     const renderCardButtons = (order) => {
-        if(order.status === 'Recibida') {
+        if(order.status === 'Recibida' || order.status === 'En Proceso' || order.status === 'Por Entregar') {
             return(
                 <>
                     <Col>

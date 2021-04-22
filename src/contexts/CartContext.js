@@ -55,7 +55,6 @@ export function CartProvider({ children }) {
     }
 
     async function addProduct(input_product, input_restaurant, addedOfProduct, instructions) {
-        console.log(addedOfProduct,instructions)
         //check if product is already in cart
         const filteredRestaurant = cart.restaurantes.find(restaurant => restaurant.restaurantId === input_restaurant.id)
         const filteredProduct = filteredRestaurant ? filteredRestaurant.products.find(product => product.id === input_product.id) : undefined;

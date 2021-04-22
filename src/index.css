@@ -12,6 +12,8 @@
   --light-green: #E5FFEB;
   --main-blue: #15F4EE;
   --light-blue: #E7FEFD;
+  --main-yellow: #FCE839;
+  --light-yellow: #FFFCE6;
   --main-orange: #FF8300;
   --light-orange: #FFF3E5;
   --border-gray: rgba(0, 24, 51, 0.1);
@@ -344,12 +346,34 @@ a .icon {
 }
 
 .received-pill {
+  background-color: var(--light-blue);
+  border: 1px solid var(--main-blue);
+  border-radius: 2px;
+}
+
+.received-pill p {
+  color: var(--main-blue);
+  padding: 5px 10px;
+}
+
+.in-process-pill {
+  background-color: var(--light-yellow);
+  border: 1px solid var(--main-yellow);
+  border-radius: 2px;
+}
+
+.in-process-pill p {
+  color: var(--main-yellow);
+  padding: 5px 10px;
+}
+
+.to-be-delivered-pill {
   background-color: var(--light-orange);
   border: 1px solid var(--main-orange);
   border-radius: 2px;
 }
 
-.received-pill p {
+.to-be-delivered-pill p {
   color: var(--main-orange);
   padding: 5px 10px;
 }
