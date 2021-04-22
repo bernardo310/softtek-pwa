@@ -154,7 +154,7 @@ const CartView = (props) => {
 
     const clickCreateOrder = async () => {
         if(payment === 'Tarjeta')
-            cashAmount = cart.total.toFixed(2);
+            setCashAmount(cart.total.toFixed(2));
 
         await createOrder(location, parkingSpot, phone, name, payment, cashAmount);
         history.push('/ordenes');
