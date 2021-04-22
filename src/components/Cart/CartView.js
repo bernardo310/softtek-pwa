@@ -135,7 +135,7 @@ const CartView = (props) => {
                 }
             }
 
-            if (productsInRestaurant.products.length > 0) {
+            if (productsInRestaurant.products.length > 0) { //TODO fix, truena cuando quitas producto en pantalla carrito teniendo difertes productos del mismo restaurant
                 productsInRestaurant.total += Number(productsInRestaurant.products[i].total);
             }
         }

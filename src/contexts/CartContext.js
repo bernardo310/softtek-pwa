@@ -17,9 +17,6 @@ export function CartProvider({ children }) {
         //gets number total items in cart
         let numItems = 0;
         const updatedCart = await getCart();
-        // updatedCart.restaurantes.forEach(restaurant => {
-        //     restaurant.products.forEach(product => numItems++)
-        // })
         return updatedCart.noProducts
     }
 
@@ -48,18 +45,18 @@ export function CartProvider({ children }) {
         return avgTiempoEntrega
     }
 
-    async function addProduct(input_product, input_restaurant, addedOfProduct) {
+    async function addProduct(input_product, input_restaurant, addedOfProduct, instructions) {
+        console.log(addedOfProduct,instructions)
         //check if product is already in cart
         const filteredRestaurant = cart.restaurantes.find(restaurant => restaurant.restaurantId === input_restaurant.id)
         const filteredProduct = filteredRestaurant ? filteredRestaurant.products.find(product => product.id === input_product.id) : undefined;
         if (filteredProduct != undefined) {
-            //already has product in cart
-            incrementProduct(input_product.id, input_restaurant.name, addedOfProduct, filteredProduct.costoUnitario, filteredProduct.tiempoEntregaUnitario)
+            await incrementProduct(input_product.id, input_restaurant.name, addedOfProduct, filteredProduct.costoUnitario, filteredProduct.tiempoEntregaUnitario, instructions)
         } else if (filteredRestaurant) {
             //add new product from existing restaurant to cart
             filteredRestaurant.products.push({
                 cantidad: addedOfProduct,
-                comentario: "",
+                comentario: instructions,
                 costoTotal: addedOfProduct * input_product.price,
                 costoUnitario: input_product.price,
                 descripcion: input_product.description,
@@ -79,19 +76,19 @@ export function CartProvider({ children }) {
                 paymentType: input_restaurant.paymentTypes,
                 products: [{
                     cantidad: addedOfProduct,
-                    comentario: "",
+                    comentario: instructions,
                     costoTotal: addedOfProduct * input_product.price,
                     costoUnitario: input_product.price,
                     descripcion: input_product.description,
                     id: input_product.id,
                     nombre: input_product.name,
-                    tiempoEntrega: input_product.estimatedTime,
+                    tiempoEntrega: input_product.estimatedTime * addedOfProduct,
                     tiempoEntregaUnitario: input_product.estimatedTime
                 }],
                 restaurantId: input_restaurant.id,
                 restaurantName: input_restaurant.name,
                 total: addedOfProduct * input_product.price,
-                waitingTime: input_product.estimatedTime,
+                waitingTime: input_product.estimatedTime * addedOfProduct,
             })
             cart.noProducts += addedOfProduct;
             cart.total = cart.total + (addedOfProduct * input_product.price);
@@ -100,19 +97,23 @@ export function CartProvider({ children }) {
         await db.collection('carts').doc(cart.cartId).update(cart);
     }
 
-    async function incrementProduct(productId, restaurantName, addedOfProduct, unitaryPrice, tiempoEntregaUnitario) {
+    async function incrementProduct(productId, restaurantName, addedOfProduct, unitaryPrice, tiempoEntregaUnitario, instructions) {
         const filteredRestaurant = cart.restaurantes.find(restaurant => restaurant.restaurantName === restaurantName);
         const filteredProduct = filteredRestaurant.products.find(product => product.id === productId);
-        filteredProduct.cantidad = addedOfProduct;
-        filteredProduct.costoTotal += Number(unitaryPrice);
-        filteredProduct.tiempoEntrega += Number(tiempoEntregaUnitario);
+        if(instructions) filteredProduct.comentario = instructions;
+        if(addedOfProduct != filteredProduct.cantidad) { //only update when addedOfProduct is different
+            const qtyDifference = addedOfProduct - filteredProduct.cantidad
+            filteredProduct.cantidad = addedOfProduct;
+            filteredProduct.costoTotal = Number(unitaryPrice * addedOfProduct);
+            filteredProduct.tiempoEntrega = Number(tiempoEntregaUnitario * addedOfProduct);
+            filteredRestaurant.total = getRestaurantTotal(filteredRestaurant)
+            filteredRestaurant.waitingTime = getRestaurantAverageWaitingTime(filteredRestaurant)
+    
+            cart.noProducts+= qtyDifference;
+            cart.total = cart.total + Number(unitaryPrice * qtyDifference);
+            cart.waitingTime = getCartTotalWaitingTime(cart);
+        }
 
-        filteredRestaurant.total = getRestaurantTotal(filteredRestaurant)
-        filteredRestaurant.waitingTime = getRestaurantAverageWaitingTime(filteredRestaurant)
-
-        cart.noProducts++;
-        cart.total = cart.total + Number(unitaryPrice);
-        cart.waitingTime = getCartTotalWaitingTime(cart);
         await db.collection('carts').doc(cart.cartId).update(cart);
     }
 

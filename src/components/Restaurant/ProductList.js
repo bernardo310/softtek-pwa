@@ -43,10 +43,10 @@ class ProductList extends Component {
                                             <div className='flex'>
                                                 <Button label='-' className='square-button' onClick={() => this.props.removeProduct(product.id, product.category, product.addedOfProduct - 1)} />
                                                 <p className='mx-3'>{product.addedOfProduct}</p>
-                                                <Button label='+' className='square-button' variant='primary' onClick={() => this.props.addProduct(product.id, product.category, product.addedOfProduct + 1)} />
+                                                <Button label='+' className='square-button' variant='primary' onClick={() => this.props.addProduct(product.id, product.category, product.addedOfProduct + 1, '')} />
                                             </div>
                                         :
-                                            <Button label='¡Agregar!' variant='primary' onClick={() => this.props.addProduct(product.id, product.category, product.addedOfProduct + 1)} />
+                                            <Button label='¡Agregar!' variant='primary' onClick={() => this.props.addProduct(product.id, product.category, product.addedOfProduct + 1, '')} />
                                         }
                                     </Col>
                                 </Row>

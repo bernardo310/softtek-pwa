@@ -32,7 +32,6 @@ const OrderList = (props) => {
     }
 
     const renderCardButtons = (order) => {
-        console.log(order);
         if(order.status === 'Recibida') {
             return(
                 <>

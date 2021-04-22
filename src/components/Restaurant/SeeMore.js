@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Input from '../common/Input';
 import Button from '../common/Button';
 import { Container, Row, Col } from 'react-bootstrap';
 import { ArrowLeft } from '../../icons/icons';
 
-const SeeMore = ({show, product, onClose, addProduct}) => {
+const SeeMore = ({show, product, onClose, addProductFront}) => {
     let [addedOfProduct, setAddedOfProduct] = useState(0);
+    const instructionsRef = useRef();
 
     useEffect(() => {
         setAddedOfProduct(product.addedOfProduct);
@@ -45,7 +46,7 @@ const SeeMore = ({show, product, onClose, addProduct}) => {
                 </Row>
                 <Row className='mb-4'>
                     <Col xs={12}>
-                        <Input type='text' label='Instrucciones de preparación' />
+                        <Input type='text' label='Instrucciones de preparación' ref={instructionsRef} />
                         <p className='text-smallest error'>
                             *Agregar instrucciones de preparación podría generar algún costo
                             extra en el producto, recomendamos contactar al comercio para confirmar
@@ -65,7 +66,7 @@ const SeeMore = ({show, product, onClose, addProduct}) => {
                         <Button
                             label={`¡Agregar! ($${product.price * addedOfProduct})`}
                             variant='primary'
-                            onClick={() => addProduct(product.id, product.category, addedOfProduct)} 
+                            onClick={() => addProductFront(product.id, product.category, addedOfProduct, instructionsRef.current.value)} 
                             disabled={addedOfProduct === 0} 
                         />
                     </Col>
