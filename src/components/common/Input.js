@@ -20,7 +20,7 @@ class Input extends Component {
     render(){
         return(
             <div className={`input-wrapper ${this.props.className ? this.props.className : 'mt-2 mb-3'} ${this.props.size ? this.props.size : 'block'} `}>
-                <input type={this.props.type} className='input' value={this.state.value} onChange={this.handleValue} ref={this.props.innerRef}/>
+                <input type={this.props.type} pattern={this.props.pattern} className='input' value={this.state.value} onChange={this.handleValue} ref={this.props.innerRef}/>
                 <div className={`input-placeholder non-bold ${this.state.value.length > 0 && 'focused'}`}>
                     {this.props.label}
                 </div>

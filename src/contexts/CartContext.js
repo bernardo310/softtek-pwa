@@ -159,11 +159,11 @@ export function CartProvider({ children }) {
         return cartData
     }
 
-    async function createOrder(location, parkingSpot, phone, name, payment) {
+    async function createOrder(location, parkingSpot, phone, name, payment, cashAmount) {
         const finalCart = await getCart();
         finalCart.restaurantes.forEach(async restaurant => {
             const { id } = await db.collection('orders').add({
-                cashAmount: null,
+                cashAmount: cashAmount,
                 creationDate: new Date(),
                 customerPhone: phone.current.value,
                 id: null,
