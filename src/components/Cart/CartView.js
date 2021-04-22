@@ -133,7 +133,9 @@ const CartView = (props) => {
                     decrementProduct(productId, restaurantName, addedOfProduct, productsInRestaurant.products[i].unitaryPrice, productsInRestaurant.products[i].tiempoEntregaUnitario)
                 }
             }
+        }
 
+        for(let i = 0; i < productsInRestaurant.products.length; i++) {
             if (productsInRestaurant.products.length > 0) {
                 productsInRestaurant.total += Number(productsInRestaurant.products[i].total);
             }
