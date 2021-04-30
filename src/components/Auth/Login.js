@@ -9,7 +9,7 @@ import googleLogo from '../../assets/google-logo.png';
 export default function Login() {
     const emailRef = useRef();
     const passwordRef = useRef();
-    const { login, loginWithGoogle } = useAuth();
+    const { login, loginWithGoogle, getNotificationsToken } = useAuth();
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const history = useHistory();
@@ -27,11 +27,25 @@ export default function Login() {
         }
         setLoading(false);
     }
+
     async function handleGoogleLogIn(e) {
         e.preventDefault();
-        await loginWithGoogle(emailRef.current.value, passwordRef.current.value);
-        history.push('/')
+        let token = '';
+        try {
+            setTimeout(() => {return setError('Favor de permitir notificaciones')}, 10000);
+            token = await getNotificationsToken();
+        } catch (err) {
+            return setError('Favor de permitir notificaciones')
+        }
+        try {
+            console.log(token)
+            await loginWithGoogle(emailRef.current.value, passwordRef.current.value, token);
+            history.push('/')
+        } catch (err) {
+            return setError('Error iniciando sesión')
+        }        
     }
+
     return (
         <Container className='vertical-center full-height'>
             <Row className='justify-content-center'>
