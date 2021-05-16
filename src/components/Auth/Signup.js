@@ -55,28 +55,18 @@ export default function Signup() {
             return setError('Error iniciando sesión')
         }        
     }
-
     return (
         <Container className='vertical-center full-height'>
             <Row className='justify-content-center'>
                 <Col xs={12} md={5} className='text-center'>
-                    <h1>Plaza Real Order To Go</h1>
+                <h1>{process.env.REACT_APP_APP_NAME ? process.env.REACT_APP_APP_NAME : 'Order To Go'}</h1>
                     <h2>Crear cuenta</h2>
                 </Col>
             </Row>
             <Row className='justify-content-center'>
                 <Col xs={12} md={3}>
                     {error ? <p>{error}</p> : ''}
-                    {/*{JSON.stringify(currentUser)}*/}
                     <form onSubmit={handleSubmit}>
-                        {/*<p>correo</p>
-                        <input type="text" ref={emailRef} />
-                        <p>password</p>
-                        <input type="text" ref={passwordRef} />
-                        <p>confirm password</p>
-                        <input type="text" ref={confirmpasswordRef} />
-                        <button type="submit" disabled={loading}>registrar</button>*/}
-
                         <Input type='email' label='Correo' ref={emailRef} />
                         <Input type='password' label='Contraseña' ref={passwordRef} />
                         <Input type='password' label='Confirmar contraseña' ref={confirmpasswordRef} />

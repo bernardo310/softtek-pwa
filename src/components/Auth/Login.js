@@ -50,7 +50,7 @@ export default function Login() {
         <Container className='vertical-center full-height'>
             <Row className='justify-content-center'>
                 <Col xs={12} md={5} className='text-center'>
-                    <h1>Plaza Real Order To Go</h1>
+                    <h1>{process.env.REACT_APP_APP_NAME ? process.env.REACT_APP_APP_NAME : 'Order To Go'}</h1>
                     <h2>Iniciar sesión</h2>
                 </Col>
             </Row>
@@ -58,14 +58,6 @@ export default function Login() {
                 <Col xs={12} md={3}>
                     {error && <p>{error}</p>}
                     <form onSubmit={handleSubmit}>
-                        {/*<p>correo</p>
-                        <input type="text" ref={emailRef} />
-
-                        <p>password</p>
-                        <input type="text" ref={passwordRef} />
-                        <button type="submit" disabled={loading}>login</button>
-                        <br />
-                        */}
                         <Input type='email' label='Correo' ref={emailRef} />
                         <Input type='password' label='Contraseña' ref={passwordRef} />
                         <Button type='submit' disabled={loading} label='Iniciar sesión' variant='primary'/>
